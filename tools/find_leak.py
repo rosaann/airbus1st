@@ -78,7 +78,7 @@ def main():
     hash_func = {'phash': imagehash.phash,
                  'ahash': imagehash.average_hash}
 
-    df_train = pd.read_csv(os.path.join(data_dir, 'train_ship_segmentations_v2.csv'), index_col='ImageId')
+    df_train = pd.read_csv(os.path.join(raw_images_dir, 'train_ship_segmentations_v2.csv'), index_col='ImageId')
 
     for hash_type, hash_func in hash_func.items():
         df_leak = find_leak(hash_func, df_train,
