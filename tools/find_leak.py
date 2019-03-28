@@ -59,7 +59,7 @@ def parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument('--data_dir', dest='data_dir',
                         help='the directory of the data',
-                        default='data', type=str)
+                        default='', type=str)
     return parser.parse_args()
 
 
