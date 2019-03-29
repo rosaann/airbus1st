@@ -27,7 +27,7 @@ def main():
     df_train = pd.read_csv(os.path.join(raw_images_dir, 'train_ship_segmentations_v2.csv'), index_col='ImageId')
     num = df_train.shape[0]
     print('total ', num)
-    index_list = range(num)
+    index_list = list(range(num))
     random.shuffle(index_list)
     train_num = int(num * 0.7)
     val_num = int(num * 0.2)
