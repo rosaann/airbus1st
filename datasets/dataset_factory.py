@@ -14,11 +14,11 @@ from .small import SmallDataset
 from .test import TestDataset
 
 
-def get_dataset(config, split, transform=None, last_epoch=-1):
+def get_dataset(config, csv_dir, transform=None, last_epoch=-1):
     f = globals().get(config.name)
 
-    return f(config.dir,
-             split=split,
+    return f('./data/ship_train_v2/',
+             csv_dir,
              transform=transform,
              **config.params)
 
@@ -29,7 +29,7 @@ def get_dataloader(config, split, transform=None, **_):
     is_train = 'train' == split
     batch_size = config.train.batch_size if is_train else config.eval.batch_size
 
-    dataloader = DefaultClassifierDataset(dataset,
+    dataloader = DataLoader(dataset,
                             shuffle=is_train,
                             batch_size=batch_size,
                             drop_last=is_train,

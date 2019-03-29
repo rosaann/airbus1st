@@ -13,66 +13,49 @@ from torch.utils.data.dataset import Dataset
 
 class DefaultClassifierDataset(Dataset):
     def __init__(self,
-                 dataset_dir,
-                 split,
+                 images_dir,
+                 csv_dir,
                  transform=None,
                  idx_fold=0,
                  num_fold=5,
-                 split_prefix='split.stratified',
+                 
                  **_):
-        self.split = split
+
         self.idx_fold = idx_fold
         self.num_fold = num_fold
         self.transform = transform
-        self.dataset_dir = dataset_dir
-        self.split_prefix = split_prefix
-        self.images_dir = os.path.join(dataset_dir, 'hip_train_v2')
-       # self.external_images_dir = os.path.join(dataset_dir, 'rgby', 'external')
+        self.csv_dir = csv_dir
+        self.images_dir = images_dir
+        self.load_data()
 
-        self.df_labels = self.load_labels()
-        self.examples = self.load_examples()
-        self.size = len(self.examples)
-
-    def load_labels(self):
-        labels_path = '{}.{}.csv'.format(self.split_prefix, self.idx_fold)
-        labels_path = os.path.join(self.dataset_dir, labels_path)
-        print('labels_path ', labels_path)
-        df_labels = pd.read_csv(labels_path)
-        df_labels = df_labels[df_labels['Split'] == self.split]
-        print('df_labels ', df_labels)
-        df_labels = df_labels.reset_index()
-
-        train_id_len = len('770126a4-bbc6-11e8-b2bc-ac1f6b6435d0')
-        def to_filepath(v):
-            if len(v) == train_id_len:
-                return os.path.join(self.images_dir, v + '.png')
-            else:
-                return os.path.join(self.external_images_dir, v + '.png')
-
-        df_labels['filepath'] = df_labels['Id'].transform(to_filepath)
-        return df_labels
-
-    def load_examples(self):
-        return [(row['Id'], row['filepath'], [int(l) for l in row['Target'].split(' ')])
-                for _, row in self.df_labels.iterrows()]
+    def load_data(self):
+        df = pd.read_csv(self.csv_dir)
+        self.datalist = []
+        for _, row in df.iterrows():
+            v = row['ImageId']
+            img_path = os.path.join(self.images_dir, v )
+            ship = 0
+            encoder_r = row['EncodedPixels']
+            if len(str(encoder_r)) > 1:
+                ship = 1
+            self.datalist.append({'p':img_path, 's':ship})
+        
+   
 
     def __getitem__(self, index):
-        example = self.examples[index]
+        example = self.datalist[index]
 
-        filename = example[1]
+        filename = example['p']
         image = misc.imread(filename)
-
-        label = [0 for _ in range(28)]
-        for l in example[2]:
-            label[l] = 1
-        label = np.array(label)
+        
+        ship = example['s']
 
         if self.transform is not None:
             image = self.transform(image)
 
         return {'image': image,
-                'label': label,
-                'key': example[0]}
+                'label': ship
+                }
 
     def __len__(self):
         return self.size
