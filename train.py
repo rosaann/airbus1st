@@ -21,7 +21,7 @@ from transforms.transform_factory import get_transform
 from models.model_factory import get_model
 from losses.loss_factory import get_loss
 from optimizers.optimizer_factory import get_optimizer
-from schedulers import get_scheduler
+from schedulers.scheduler_factory import get_scheduler
 #import utils
 import utils.config
 
