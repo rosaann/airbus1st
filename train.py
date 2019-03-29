@@ -18,7 +18,7 @@ from tensorboardX import SummaryWriter
 
 from datasets.dataset_factory import get_dataloader
 from transforms.transform_factory import get_transform
-from models import get_model
+from models.model_factory import get_model
 from losses.loss_factory import get_loss
 from optimizers.optimizer_factory import get_optimizer
 from schedulers import get_scheduler
