@@ -236,8 +236,8 @@ def main():
 
     print('train airbus Classification Challenge.')
     args = parse_args()
-    if args.config_file is None:
-      raise Exception('no configuration file')
+  #  if args.config_file is None:
+  #    raise Exception('no configuration file')
 
     config = utils.config.load(args.config_file)
     pprint.PrettyPrinter(indent=2).pprint(config)
