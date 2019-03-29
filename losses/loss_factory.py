@@ -8,7 +8,7 @@ import torch.nn.functional as F
 
 
 
-import loss.lovasz_losses as L
+from .lovasz_losses import *
 
 
 def binary_focal_loss(gamma=2, **_):
