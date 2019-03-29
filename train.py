@@ -16,7 +16,7 @@ import torch
 import torch.nn.functional as F
 from tensorboardX import SummaryWriter
 
-from datasets import get_dataloader
+from datasets.dataset_factory import get_dataloader
 from transforms import get_transform
 from models import get_model
 from losses.loss_factory import get_loss
@@ -40,14 +40,14 @@ def run(config):
     optimizer_segmenter = get_optimizer(config.optimizer_segmenter.name, model_segmenter.parameters(), config.optimizer_segmenter.params)
 
 
-    checkpoint = utils.checkpoint.get_initial_checkpoint(config)
-    if checkpoint is not None:
-        last_epoch, step = utils.checkpoint.load_checkpoint(model, optimizer, checkpoint)
-    else:
-        last_epoch, step = -1, -1
+  #  checkpoint = utils.checkpoint.get_initial_checkpoint(config)
+  #  if checkpoint is not None:
+  #      last_epoch, step = utils.checkpoint.load_checkpoint(model, optimizer, checkpoint)
+  #  else:
+  #      last_epoch, step = -1, -1
 
-    print('from checkpoint: {} last epoch:{}'.format(checkpoint, last_epoch))
-    scheduler = get_scheduler(config, optimizer, last_epoch)
+  #  print('from checkpoint: {} last epoch:{}'.format(checkpoint, last_epoch))
+  #  scheduler = get_scheduler(config, optimizer, last_epoch)
     
     dataloaders = {split:get_dataloader(config, split, get_transform(config, split))
                    for split in ['train', 'val']}

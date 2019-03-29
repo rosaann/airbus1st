@@ -10,10 +10,15 @@ def _get_default_config():
   c = edict()
 
   # dataset
-  c.data = edict()
-  c.data.name = 'DefaultDataset'
-  c.data.dir = './data'
-  c.data.params = edict()
+  c.data_classifier = edict()
+  c.data_classifier.name = 'DefaultClassifierDataset'
+  c.data_classifier.dir = './data'
+  c.data_classifier.params = edict()
+  
+  c.data_segmenter = edict()
+  c.data_segmenter.name = 'DefaultSegmenterDataset'
+  c.data_segmenter.dir = './data'
+  c.data_segmenter.params = edict()
 
   # model
   c.model_classifier = edict()
