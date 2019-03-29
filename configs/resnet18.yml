@@ -1,17 +1,14 @@
 
 train:
   dir: './results/resnet18'
-  batch_size: 3
+  batch_size: 20
   num_epochs: 23
   num_grad_acc: 4
 
 eval:
-  batch_size: 4
+  batch_size: 20
 
 
-optimizer:
-  name: 'adam'
-  params:
-    lr: 0.0005
+
 
 
