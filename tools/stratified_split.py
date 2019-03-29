@@ -60,7 +60,7 @@ def main():
         test_data.append((img_id, encoder_p))
     
     test_pd = pd.DataFrame.from_records(test_data, columns=['ImageId', 'EncodedPixels'])
-    output_filename = os.path.join(raw_images_dir, 'data_val.csv')
+    output_filename = os.path.join(raw_images_dir, 'data_test.csv')
     test_pd.to_csv(output_filename, index=False)
     
 if __name__ == '__main__':
