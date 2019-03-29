@@ -4,8 +4,7 @@ from __future__ import print_function
 
 import os
 import argparse
-import math
-from itertools import combinations
+
 import random
 
 import tqdm
@@ -34,7 +33,7 @@ def main():
     test_num = num - train_num - val_num
     
     train_data = []
-    for i in range(train_num):
+    for i in tqdm.tqdm(range(train_num)):
         img_id = df_train.get_value(i, 'ImageId')
         encoder_p = df_train.get_value(i, 'EncodedPixels')
         train_data.append((img_id, encoder_p))
@@ -44,7 +43,7 @@ def main():
     train_pd.to_csv(output_filename, index=False)
     
     val_data = []
-    for i in range(val_num):
+    for i in tqdm.tqdm(range(val_num)):
         img_id = df_train.get_value(i, 'ImageId')
         encoder_p = df_train.get_value(i, 'EncodedPixels')
         val_data.append((img_id, encoder_p))
@@ -54,7 +53,7 @@ def main():
     val_pd.to_csv(output_filename, index=False)
 
     test_data = []
-    for i in range(test_num):
+    for i in tqdm.tqdm(range(test_num)):
         img_id = df_train.get_value(i, 'ImageId')
         encoder_p = df_train.get_value(i, 'EncodedPixels')
         test_data.append((img_id, encoder_p))
