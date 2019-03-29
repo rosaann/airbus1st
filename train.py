@@ -26,7 +26,6 @@ from schedulers.scheduler_factory import get_scheduler
 import utils.config
 
 from models.model_factory import get_model
-from optimizers import get_optimizer
 
 def inference(model, images):
     logits = model(images)
