@@ -24,7 +24,7 @@ def main():
     args = parse_args()
     data_dir = args.data_dir
     raw_images_dir = os.path.join(data_dir, 'data')
-    df_train = pd.read_csv(os.path.join(raw_images_dir, 'train_ship_segmentations_v2.csv'), index_col='ImageId')
+    df_train = pd.read_csv(os.path.join(raw_images_dir, 'train_ship_segmentations_v2.csv'))
     num = df_train.shape[0]
     print('total ', num)
     index_list = list(range(num))
