@@ -22,7 +22,7 @@ from models.model_factory import get_model
 from losses.loss_factory import get_loss
 from optimizers.optimizer_factory import get_optimizer
 from schedulers.scheduler_factory import get_scheduler
-#import utils
+import utils
 import utils.config
 
 from models.model_factory import get_model
@@ -205,18 +205,18 @@ def run(config):
     optimizer_segmenter = get_optimizer(config.optimizer_segmenter.name, model_segmenter.parameters(), config.optimizer_segmenter.params)
 
 
-  #  checkpoint = utils.checkpoint.get_initial_checkpoint(config)
-  #  if checkpoint is not None:
-  #      last_epoch, step = utils.checkpoint.load_checkpoint(model, optimizer, checkpoint)
-  #  else:
-  #      last_epoch, step = -1, -1
+    checkpoint_classifier = utils.checkpoint.get_initial_checkpoint(config.train_classifier.dir)
+    if checkpoint is not None:
+        last_epoch, step = utils.checkpoint.load_checkpoint(model_classifier, optimizer_classifier, checkpoint_classifier)
+    else:
+        last_epoch, step = -1, -1
 
-  #  print('from checkpoint: {} last epoch:{}'.format(checkpoint, last_epoch))
+    print('from checkpoint: {} last epoch:{}'.format(checkpoint, last_epoch))
   #  scheduler = get_scheduler(config, optimizer, last_epoch)
     scheduler = 'none'
-    train_dataloaders = get_dataloader(config,'./data/data_train.csv', get_transform(config, split))
-    val_dataloaders = get_dataloader(config,'./data/data_val.csv', get_transform(config, split))
-    test_dataloaders = get_dataloader(config,'./data/data_test.csv', get_transform(config, split))
+    train_dataloaders = get_dataloader(config,'./data/data_train.csv', get_transform(config, 'train'))
+    val_dataloaders = get_dataloader(config,'./data/data_val.csv', get_transform(config, 'val'))
+    test_dataloaders = get_dataloader(config,'./data/data_test.csv', get_transform(config, 'test'))
 
     
 
