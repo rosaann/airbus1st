@@ -24,7 +24,7 @@ from optimizers.optimizer_factory import get_optimizer
 from schedulers.scheduler_factory import get_scheduler
 from utils.utils import prepare_train_directories
 import utils.config
-import utils.checkpoint
+from utils.checkpoint import *
 from models.model_factory import get_model
 
 def inference(model, images):
