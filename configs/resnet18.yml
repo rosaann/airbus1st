@@ -5,7 +5,7 @@ train_classifier:
   num_epochs: 23
   num_grad_acc: 4
 
-eval:
+eval_classifier:
   batch_size: 20
 
 
