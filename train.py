@@ -205,13 +205,13 @@ def run(config):
     optimizer_segmenter = get_optimizer(config.optimizer_segmenter.name, model_segmenter.parameters(), config.optimizer_segmenter.params)
 
 
-    checkpoint_classifier = checkpoint.get_initial_checkpoint(config.train_classifier.dir)
+    checkpoint_classifier = get_initial_checkpoint(config.train_classifier.dir)
     if checkpoint_classifier is not None:
-        last_epoch, step = checkpoint.load_checkpoint(model_classifier, optimizer_classifier, checkpoint_classifier)
+        last_epoch, step = load_checkpoint(model_classifier, optimizer_classifier, checkpoint_classifier)
     else:
         last_epoch, step = -1, -1
 
-    print('from checkpoint: {} last epoch:{}'.format(checkpoint, last_epoch))
+    print('from checkpoint: {} last epoch:{}'.format(checkpoint_classifier, last_epoch))
   #  scheduler = get_scheduler(config, optimizer, last_epoch)
     scheduler = 'none'
     train_dataloaders = get_dataloader(config,'./data/data_train.csv', get_transform(config, 'train'))
