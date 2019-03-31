@@ -8,5 +8,9 @@ import cv2
 import numpy as np
 
 def prepare_train_directories(config):
-  out_dir = config.train.dir
+  out_dir = config.train_classifier.dir
   os.makedirs(os.path.join(out_dir, 'checkpoint'), exist_ok=True)
+  
+  out_dir = config.train_segmenter.dir
+  os.makedirs(os.path.join(out_dir, 'checkpoint'), exist_ok=True)
+

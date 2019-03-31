@@ -181,7 +181,7 @@ def train_classifier(config, model, train_dataloader, val_dataloader, criterion,
         elif config.scheduler.name != 'reduce_lr_on_plateau':
           scheduler.step()
 
-        utils.checkpoint.save_checkpoint(config, model, optimizer, epoch, 0)
+        utils.checkpoint.save_checkpoint(config.train_classifier.dir, model, optimizer, epoch, 0)
 
         f1_list.append(f1)
         f1_list = f1_list[-10:]
@@ -193,7 +193,7 @@ def train_classifier(config, model, train_dataloader, val_dataloader, criterion,
             best_f1_mavg = f1_mavg
     return {'f1': best_f1, 'f1_mavg': best_f1_mavg}
 def run(config):
-    train_dir = config.train.dir
+   # train_dir = config.train.dir
     
     model_classifier = get_model(config.model_classifier.name)
     model_segmenter = get_model(config.model_segmenter.name)
@@ -225,7 +225,7 @@ def run(config):
           writer, last_epoch+1)
 
 def parse_args():
-    parser = argparse.ArgumentParser(description='HPA')
+    parser = argparse.ArgumentParser(description='airbus')
     parser.add_argument('--config', dest='config_file',
                         help='configuration filename',
                         default=None, type=str)

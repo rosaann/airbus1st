@@ -22,13 +22,13 @@ def get_initial_checkpoint(check_dir):
   return get_last_checkpoint(checkpoint_dir)
 
 
-def get_checkpoint(config, name):
-  checkpoint_dir = os.path.join(config.train.dir, 'checkpoint')
+def get_checkpoint(check_dir, name):
+  checkpoint_dir = os.path.join(check_dir, 'checkpoint')
   return os.path.join(checkpoint_dir, name)
 
 
-def copy_last_n_checkpoints(config, n, name):
-  checkpoint_dir = os.path.join(config.train.dir, 'checkpoint')
+def copy_last_n_checkpoints(check_dir, n, name):
+  checkpoint_dir = os.path.join(check_dir, 'checkpoint')
   checkpoints = [checkpoint
                  for checkpoint in os.listdir(checkpoint_dir)
                  if checkpoint.startswith('epoch_') and checkpoint.endswith('.pth')]
@@ -70,8 +70,8 @@ def load_checkpoint(model, optimizer, checkpoint):
   return last_epoch, step
 
 
-def save_checkpoint(config, model, optimizer, epoch, step, weights_dict=None, name=None):
-  checkpoint_dir = os.path.join(config.train.dir, 'checkpoint')
+def save_checkpoint(check_dir, model, optimizer, epoch, step, weights_dict=None, name=None):
+  checkpoint_dir = os.path.join(check_dir, 'checkpoint')
 
   if name:
     checkpoint_path = os.path.join(checkpoint_dir, '{}.pth'.format(name))
