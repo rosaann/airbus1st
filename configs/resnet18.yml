@@ -9,6 +9,7 @@ eval_classifier:
   batch_size: 20
 
 
-
+loss__classifier:
+  name: 'cross_entropy'
 
 

@@ -69,9 +69,9 @@ def _get_default_config():
   c.transform.params = edict()
 
   # losses
-  c.loss = edict()
-  c.loss.name = None
-  c.loss.params = edict()
+  c.loss_classifier = edict()
+  c.loss_classifier.name = None
+  c.loss_classifier.params = edict()
 
   return c
 
