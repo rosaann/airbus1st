@@ -1,5 +1,5 @@
 
-train:
+train_classifier:
   dir: './results/resnet18'
   batch_size: 20
   num_epochs: 23
