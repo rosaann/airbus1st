@@ -24,7 +24,7 @@ from optimizers.optimizer_factory import get_optimizer
 from schedulers.scheduler_factory import get_scheduler
 from utils.utils import prepare_train_directories
 import utils.config
-
+import utils.checkpoint
 from models.model_factory import get_model
 
 def inference(model, images):
@@ -205,9 +205,9 @@ def run(config):
     optimizer_segmenter = get_optimizer(config.optimizer_segmenter.name, model_segmenter.parameters(), config.optimizer_segmenter.params)
 
 
-    checkpoint_classifier = utils.checkpoint.get_initial_checkpoint(config.train_classifier.dir)
-    if checkpoint is not None:
-        last_epoch, step = utils.checkpoint.load_checkpoint(model_classifier, optimizer_classifier, checkpoint_classifier)
+    checkpoint_classifier = checkpoint.get_initial_checkpoint(config.train_classifier.dir)
+    if checkpoint_classifier is not None:
+        last_epoch, step = checkpoint.load_checkpoint(model_classifier, optimizer_classifier, checkpoint_classifier)
     else:
         last_epoch, step = -1, -1
 
