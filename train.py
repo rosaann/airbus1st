@@ -22,7 +22,7 @@ from models.model_factory import get_model
 from losses.loss_factory import get_loss
 from optimizers.optimizer_factory import get_optimizer
 from schedulers.scheduler_factory import get_scheduler
-import utils
+import utils.utils
 import utils.config
 
 from models.model_factory import get_model
