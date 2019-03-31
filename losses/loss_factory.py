@@ -30,6 +30,6 @@ def cross_entropy(**_):
 
 
 
-def get_loss(config):
-    f = globals().get(config.loss.name)
-    return f(**config.loss.params)
+def get_loss(loss):
+    f = globals().get(loss.name)
+    return f(**loss.params)

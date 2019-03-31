@@ -200,7 +200,7 @@ def run(config):
     if torch.cuda.is_available():
         model_classifier = model_classifier.cuda()
         model_segmenter = model_segmenter.cuda()
-    criterion = get_loss(config)
+    criterion = get_loss(config.loss_classifier)
     optimizer_classifier = get_optimizer(config.optimizer_classifier.name, model_classifier.parameters(), config.optimizer_classifier.params)
     optimizer_segmenter = get_optimizer(config.optimizer_segmenter.name, model_segmenter.parameters(), config.optimizer_segmenter.params)
 
