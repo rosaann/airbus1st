@@ -22,7 +22,7 @@ from models.model_factory import get_model
 from losses.loss_factory import get_loss
 from optimizers.optimizer_factory import get_optimizer
 from schedulers.scheduler_factory import get_scheduler
-import utils.utils
+from utils.utils import prepare_train_directories
 import utils.config
 
 from models.model_factory import get_model
@@ -241,7 +241,7 @@ def main():
 
     config = utils.config.load(args.config_file)
     pprint.PrettyPrinter(indent=2).pprint(config)
-    utils.prepare_train_directories(config)
+    prepare_train_directories(config)
     run(config)
 
     print('success!')
