@@ -35,10 +35,10 @@ class DefaultClassifierDataset(Dataset):
         for _, row in df.iterrows():
             v = row['ImageId']
             img_path = os.path.join(self.images_dir, v )
-            ship = 0
+            ship = [0]
             encoder_r = row['EncodedPixels']
             if len(str(encoder_r)) > 1:
-                ship = 1
+                ship = [1]
             self.datalist.append({'p':img_path, 's':ship})
         
    
