@@ -28,7 +28,9 @@ def _get_default_config():
   c.model_segmenter = edict()
   c.model_segmenter.name = 'resnet18_segmenter'
   c.model_segmenter.params = edict()
-  # train
+  # trainc.train_classifier = edict()
+  c.train.dir = './result/out/writer/'
+  
   c.train_classifier = edict()
   c.train_classifier.dir = './result/out/classifier/'
   c.train_classifier.batch_size = 64
