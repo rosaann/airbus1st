@@ -41,7 +41,7 @@ def train_classifier_single_epoch(config, model, dataloader, criterion, optimize
                        epoch, writer, postfix_dict):
     model.train()
 
-    batch_size = config.train.batch_size
+    batch_size = config.train_classifier.batch_size
     total_size = len(dataloader.dataset)
     total_step = math.ceil(total_size / batch_size)
 
@@ -67,10 +67,10 @@ def train_classifier_single_epoch(config, model, dataloader, criterion, optimize
 
         loss.backward()
 
-        if config.train.num_grad_acc is None:
+        if config.train_classifier.num_grad_acc is None:
             optimizer.step()
             optimizer.zero_grad()
-        elif (i+1) % config.train.num_grad_acc == 0:
+        elif (i+1) % config.train_classifier.num_grad_acc == 0:
             optimizer.step()
             optimizer.zero_grad()
 
@@ -96,7 +96,7 @@ def evaluate_classifier_single_epoch(config, model, dataloader, criterion,
     model.eval()
 
     with torch.no_grad():
-        batch_size = config.eval.batch_size
+        batch_size = config.eval_classifier.batch_size
         total_size = len(dataloader.dataset)
         total_step = math.ceil(total_size / batch_size)
 
@@ -150,7 +150,7 @@ def evaluate_classifier_single_epoch(config, model, dataloader, criterion,
 
         return f1
 def train_classifier(config, model, train_dataloader, val_dataloader, criterion, optimizer, scheduler, writer, start_epoch):
-    num_epochs = config.train.num_epochs
+    num_epochs = config.train_classifier.num_epochs
     
     if torch.cuda.device_count() > 1:
         model = torch.nn.DataParallel(model)
