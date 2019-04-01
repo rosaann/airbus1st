@@ -51,8 +51,8 @@ class DefaultClassifierDataset(Dataset):
         
         ship = example['s']
 
-        if self.transform is not None:
-            image = self.transform(image)
+      #  if self.transform is not None:
+      #      image = self.transform(image)
 
         return {'image': image,
                 'label': ship
