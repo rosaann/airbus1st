@@ -63,10 +63,15 @@ def _get_default_config():
   c.scheduler.params = edict()
 
   # transforms
-  c.transform = edict()
-  c.transform.name = 'default_transform'
-  c.transform.num_preprocessor = 4
-  c.transform.params = edict()
+  c.transform_classifier = edict()
+  c.transform_classifier.name = 'default_transform'
+  c.transform_classifier.num_preprocessor = 4
+  c.transform_classifier.params = edict()
+  
+  c.transform_segmenter = edict()
+  c.transform_segmenter.name = 'default_transform'
+  c.transform_segmenter.num_preprocessor = 4
+  c.transform_segmenter.params = edict()
 
   # losses
   c.loss_classifier = edict()

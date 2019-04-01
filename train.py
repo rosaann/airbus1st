@@ -214,8 +214,8 @@ def run(config):
     print('from checkpoint: {} last epoch:{}'.format(checkpoint_classifier, last_epoch))
   #  scheduler = get_scheduler(config, optimizer, last_epoch)
     scheduler = 'none'
-    train_dataloaders = get_dataloader(config,'./data/data_train.csv', get_transform(config, 'train'))
-    val_dataloaders = get_dataloader(config,'./data/data_val.csv', get_transform(config, 'val'))
+    train_dataloaders = get_dataloader(config,'./data/data_train.csv', get_transform(config.transform_classifier, 'train'))
+    val_dataloaders = get_dataloader(config,'./data/data_val.csv', get_transform(config.transform_classifier, 'val'))
     test_dataloaders = get_dataloader(config,'./data/data_test.csv', get_transform(config, 'test'))
 
     
