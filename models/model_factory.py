@@ -89,7 +89,7 @@ def get_senet(model_name='se_resnext50', num_classes=1, **_):
     return model
 
 
-def get_se_resnext50(num_classes=28, **kwargs):
+def get_se_resnext50(num_classes=1, **kwargs):
     return get_senet('se_resnext50_32x4d', num_classes=num_classes, **kwargs)
 def get_model(model_name, params = None):
     print('model name:', model_name)
