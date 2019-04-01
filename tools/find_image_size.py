@@ -22,7 +22,8 @@ def parse_args():
                         help='the directory of the data',
                         default='', type=str)
     return parser.parse_args()
-
+def takeSecond(elem):
+    return elem[1]
 
 def main():
     args = parse_args()
@@ -38,6 +39,7 @@ def main():
         size = os.path.getsize(path)
         results.append((image_id, size))
         
+    results.sort(key=takeSecond, reverse=True)
     train_pd = pd.DataFrame.from_records(results, columns=['ImageId', 'size'])
     output_filename = os.path.join(raw_images_dir, 'size_train_segmenter.csv')
     train_pd.to_csv(output_filename, index=False)
