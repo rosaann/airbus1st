@@ -59,7 +59,7 @@ class DefaultClassifierDataset(Dataset):
                 }
 
     def __len__(self):
-        return self.size
+        return len( self.datalist)
 
 
 def test():
