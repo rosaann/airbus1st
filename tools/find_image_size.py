@@ -33,7 +33,7 @@ def main():
     results = []
     for i, row in tqdm.tqdm(df_train.iterrows()):
         image_id = row['ImageId']
-        image_name = image_id + '.jpg'
+        image_name = image_id
         path = os.path.join('./data/ship_train_v2/', image_name)
         size = os.path.getsize(path)
         results.append((image_id, size))
