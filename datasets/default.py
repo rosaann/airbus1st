@@ -55,7 +55,7 @@ class DefaultClassifierDataset(Dataset):
             image = self.transform(image)
 
         return {'image': image,
-                'label': ship
+                'label': np.array(ship)
                 }
 
     def __len__(self):
