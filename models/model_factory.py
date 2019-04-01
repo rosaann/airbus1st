@@ -80,7 +80,7 @@ def get_resnet18_classifier(num_classes=1, **kwargs):
     return Resnet18Classifier(1)
 
 def get_senet(model_name='se_resnext50', num_classes=1, **_):
-    model = pretrainedmodels.__dict__[model_name](num_classes=1000, pretrained='imagenet')
+    model = pretrainedmodels.__dict__[model_name](num_classes=1000, pretrained=None)
     
 
     model.avgpool = torch.nn.AdaptiveAvgPool2d(1)
