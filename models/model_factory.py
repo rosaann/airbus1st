@@ -70,7 +70,7 @@ class Resnet18Classifier(torch.nn.Module):
         self.resnet.fc = torch.nn.Linear(self.resnet.fc.in_features, num_classes)
 
     def forward(self, x):
-        x = x['image']
+      #  x = x['image']
         return {'has_ships': self.resnet(x)}
 def get_resnet18_segmenter(num_classes=1, **kwargs):
     return Resnet18Segmenter(1)

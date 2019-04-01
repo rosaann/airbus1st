@@ -55,7 +55,7 @@ def train_classifier_single_epoch(config, model, dataloader, criterion, optimize
         if torch.cuda.is_available():
             images = images.cuda()
             labels = labels.cuda()
-        logits, aux_logits, probabilities = inference(model, data)
+        logits, aux_logits, probabilities = inference(model, images)
         if aux_logits is not None:
             aux_loss = criterion(aux_logits, labels.float())
             loss = loss + 0.4 * aux_loss
