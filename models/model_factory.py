@@ -83,9 +83,9 @@ def get_senet(model_name='se_resnext50', num_classes=1, **_):
     model = pretrainedmodels.__dict__[model_name](num_classes=1000, pretrained='imagenet')
     
 
-    model.avgpool = nn.AdaptiveAvgPool2d(1)
+    model.avgpool = torch.nn.AdaptiveAvgPool2d(1)
     in_features = model.last_linear.in_features
-    model.last_linear = nn.Linear(in_features, num_classes)
+    model.last_linear = torch.nn.Linear(in_features, num_classes)
     return model
 
 
