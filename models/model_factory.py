@@ -71,6 +71,7 @@ class Resnet18Classifier(torch.nn.Module):
 
     def forward(self, x):
       #  x = x['image']
+        print('x.shape ', x.shape)
         return {'has_ships': self.resnet(x)}
 def get_resnet18_segmenter(num_classes=1, **kwargs):
     return Resnet18Segmenter(1)
