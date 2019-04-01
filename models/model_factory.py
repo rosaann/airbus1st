@@ -66,7 +66,7 @@ class Resnet18Segmenter(torch.nn.Module):
 class Resnet18Classifier(torch.nn.Module):
     def __init__(self, num_classes):
         super().__init__()
-        self.resnet = torchvision.models.resnet18(pretrained=True)
+        self.resnet = torchvision.models.resnet18(pretrained=False)
         self.resnet.fc = torch.nn.Linear(self.resnet.fc.in_features, num_classes)
 
     def forward(self, x):
