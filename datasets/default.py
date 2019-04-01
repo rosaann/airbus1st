@@ -29,6 +29,7 @@ class DefaultClassifierDataset(Dataset):
         self.load_data()
 
     def load_data(self):
+        print('csv_dir ', self.csv_dir)
         df = pd.read_csv(self.csv_dir)
         self.datalist = []
         for _, row in df.iterrows():
