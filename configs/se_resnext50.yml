@@ -23,7 +23,7 @@ transform_classifier:
 
 model_classifier:
     name: 'se_resnext50'
-  params:
-    cnn: 'se_resnext50'
-    attention_size: 32
+    params:
+      cnn: 'se_resnext50'
+      attention_size: 32
     
