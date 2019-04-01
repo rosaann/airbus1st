@@ -82,8 +82,8 @@ def policy_transform(split,
 
     image = image.astype(np.float32)
     if per_image_norm:
-        mean = np.mean(image.reshape(-1, 4), axis=0)
-        std = np.std(image.reshape(-1, 4), axis=0)
+        mean = np.mean(image.reshape(-1, 3), axis=0)
+        std = np.std(image.reshape(-1, 3), axis=0)
         image -= mean
         image /= (std + 0.0000001)
     else:
