@@ -1,3 +1,3 @@
 #!/bin/bash
 
-python train.py --config=configs/resnet18.yml
+python train.py --config=configs/se_resnext50.yml

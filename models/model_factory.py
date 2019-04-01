@@ -79,6 +79,18 @@ def get_resnet18_segmenter(num_classes=1, **kwargs):
 def get_resnet18_classifier(num_classes=1, **kwargs):
     return Resnet18Classifier(1)
 
+def get_senet(model_name='se_resnext50', num_classes=1, **_):
+    model = pretrainedmodels.__dict__[model_name](num_classes=1, pretrained='imagenet')
+    
+
+    model.avgpool = nn.AdaptiveAvgPool2d(1)
+    in_features = model.last_linear.in_features
+    model.last_linear = nn.Linear(in_features, num_classes)
+    return model
+
+
+def get_se_resnext50(num_classes=28, **kwargs):
+    return get_senet('se_resnext50_32x4d', num_classes=num_classes, **kwargs)
 def get_model(model_name, params = None):
     print('model name:', model_name)
     f = globals().get('get_' + model_name)
