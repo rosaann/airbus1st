@@ -116,7 +116,7 @@ def policy_transform(split,
   #  else:
   #      image -= means
   #      image /= stds
-    image = np.transpose(image, (2, 0, 1))
+  #  image = np.transpose(image, (2, 0, 1))
 
     return image
 
