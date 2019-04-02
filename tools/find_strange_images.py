@@ -35,7 +35,7 @@ def main():
     for i, row in tqdm.tqdm(df_train.iterrows()):
         image_id = row['ImageId']
         image_name = image_id
-        if image_name != '7ea963164.jpg':
+        if image_name != '7ea963164.jpg' and image_name != '4add0b9ef.jpg':
             results.append((image_id, row['EncodedPixels']))
         
    # results.sort(key=takeSecond, reverse=True)
