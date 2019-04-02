@@ -1,12 +1,12 @@
 
 train_classifier:
-  dir: './results/se_resnext50'
+  dir: './result/se_resnext50'
   batch_size: 60
   num_epochs: 23
   num_grad_acc: 4
   
 train_classifier:
-  dir: './results/se_resnext50'
+  dir: './result/se_resnext50'
   batch_size: 64
   num_epochs: 23
   num_grad_acc: 4
