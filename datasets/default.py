@@ -42,7 +42,8 @@ class DefaultClassifierDataset(Dataset):
             if len(str(encoder_r)) > 1:
                 ship = [1]
             self.datalist.append({'p':img_path, 's':ship, 'i':v})
-        
+            if len(self.datalist) >= 5000:
+                break
    
 
     def __getitem__(self, index):

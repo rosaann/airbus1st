@@ -117,10 +117,10 @@ def evaluate_classifier_single_epoch(config, model, dataloader, criterion,
 
             
           #  loss = criterion(logits, labels.float())
-            if aux_logits is not None:
-                aux_loss = criterion(aux_logits, labels.float())
-                loss = loss + 0.4 * aux_loss
-            loss_list.append(loss.item())
+          #  if aux_logits is not None:
+          #      aux_loss = criterion(aux_logits, labels.float())
+          #      loss = loss + 0.4 * aux_loss
+          #  loss_list.append(loss.item())
 
             probability_list.extend(probabilities.cpu().numpy())
             label_list.extend(labels.cpu().numpy())
