@@ -86,8 +86,8 @@ def policy_transform(split,
       transform = transforms.Compose([
                 transforms.ToPILImage(),
                 transforms.ToTensor(), # range [0, 255] -> [0.0,1.0]
-               # transforms.Normalize([0.5,0.5,0.5], [0.5,0.5,0.5])
-              #  transforms.Normalize(mean = (0.5, 0.5, 0.5), std = (0.5, 0.5, 0.5))
+                transforms.Normalize([0.5,0.5,0.5], [0.5,0.5,0.5]),
+                transforms.Normalize(mean = (0.5, 0.5, 0.5), std = (0.5, 0.5, 0.5))
                 ])
     
       image = transform(image)
@@ -100,22 +100,22 @@ def policy_transform(split,
       transform = transforms.Compose([
                 transforms.ToPILImage(),
                 transforms.ToTensor(), # range [0, 255] -> [0.0,1.0]
-               # transforms.Normalize([0.5,0.5,0.5], [0.5,0.5,0.5])
-              #  transforms.Normalize(mean = (0.5, 0.5, 0.5), std = (0.5, 0.5, 0.5))
+                transforms.Normalize([0.5,0.5,0.5], [0.5,0.5,0.5]),
+                transforms.Normalize(mean = (0.5, 0.5, 0.5), std = (0.5, 0.5, 0.5))
                 ])
     
       image = transform(image)
 
 
   #  image = image.astype(np.float32)
-    if per_image_norm:
-        mean = np.mean(image.reshape(-1, 3), axis=0)
-        std = np.std(image.reshape(-1, 3), axis=0)
-        image -= mean
-        image /= (std + 0.0000001)
-    else:
-        image -= means
-        image /= stds
+  #  if per_image_norm:
+  #      mean = np.mean(image.reshape(-1, 3), axis=0)
+  #      std = np.std(image.reshape(-1, 3), axis=0)
+  #      image -= mean
+  #      image /= (std + 0.0000001)
+  #  else:
+  #      image -= means
+  #      image /= stds
     image = np.transpose(image, (2, 0, 1))
 
     return image
