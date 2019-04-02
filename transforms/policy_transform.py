@@ -14,6 +14,9 @@ from albumentations import Blur, MotionBlur, InvertImg
 from albumentations import Rotate, ShiftScaleRotate, RandomScale
 from albumentations import GridDistortion, ElasticTransform
 
+from torchvision import transforms
+
+
 import scipy.misc as misc
 POLICIES = [
   ('RandomContrast',    {'limit': (0.1, 0.3), 'p': [0.0, 0.25, 0.5, 0.75]}),
@@ -79,12 +82,29 @@ def policy_transform(split,
     #  print('image shape ', image.shape)
     #  image = resize(image=image)['image']
    #   image = misc.imresize(image, (size, size)).astype('float32')
-      image    = image.reshape(img_shape)
+      image = cv2.resize(image, (size, size))
+      transform = transforms.Compose([
+                transforms.ToPILImage(),
+                transforms.ToTensor(), # range [0, 255] -> [0.0,1.0]
+               # transforms.Normalize([0.5,0.5,0.5], [0.5,0.5,0.5])
+              #  transforms.Normalize(mean = (0.5, 0.5, 0.5), std = (0.5, 0.5, 0.5))
+                ])
+    
+      image = transform(image)
+
     else:
-      if size != image.shape[0]:
+    #  if size != image.shape[0]:
       #  image = resize(image=image)['image']
         #image = misc.imresize(image, (size, size)).astype('float32')
-        image    = image.reshape(img_shape)
+      image = cv2.resize(image, (size, size))
+      transform = transforms.Compose([
+                transforms.ToPILImage(),
+                transforms.ToTensor(), # range [0, 255] -> [0.0,1.0]
+               # transforms.Normalize([0.5,0.5,0.5], [0.5,0.5,0.5])
+              #  transforms.Normalize(mean = (0.5, 0.5, 0.5), std = (0.5, 0.5, 0.5))
+                ])
+    
+      image = transform(image)
 
 
     image = image.astype(np.float32)
