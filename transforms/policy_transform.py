@@ -107,7 +107,7 @@ def policy_transform(split,
       image = transform(image)
 
 
-    image = image.astype(np.float32)
+  #  image = image.astype(np.float32)
     if per_image_norm:
         mean = np.mean(image.reshape(-1, 3), axis=0)
         std = np.std(image.reshape(-1, 3), axis=0)
