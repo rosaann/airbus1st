@@ -7,6 +7,7 @@ import os
 import numpy as np
 import pandas as pd
 import scipy.misc as misc
+from PIL import Image as pil_image
 
 from torch.utils.data.dataset import Dataset
 
@@ -47,7 +48,9 @@ class DefaultClassifierDataset(Dataset):
         example = self.datalist[index]
 
         filename = example['p']
-        image = misc.imread(filename)
+        #image = misc.imread(filename)
+        image = pil_image.open(filename)
+        image = np.array(image,dtype=np.float64)
         
         ship = example['s']
 

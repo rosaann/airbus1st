@@ -29,7 +29,7 @@ POLICIES = [
   ('ElasticTransform',  {'alpha': 1, 'sigma': (30, 70), 'alpha_affine': (30, 70),  'p': [0.0, 0.25, 0.5, 0.75]}),
 ]
 
-
+img_shape = (224,224,3)
 def policy_transform(split,
                      policies=None,
                      size=224,
@@ -78,11 +78,13 @@ def policy_transform(split,
     #     image = aug(image=image)['image']
     #  print('image shape ', image.shape)
     #  image = resize(image=image)['image']
-      image = misc.imresize(image, (size, size)).astype('float32')
+   #   image = misc.imresize(image, (size, size)).astype('float32')
+      image    = image.reshape(img_shape)
     else:
       if size != image.shape[0]:
       #  image = resize(image=image)['image']
-        image = misc.imresize(image, (size, size)).astype('float32')
+        #image = misc.imresize(image, (size, size)).astype('float32')
+        image    = image.reshape(img_shape)
 
 
     image = image.astype(np.float32)
