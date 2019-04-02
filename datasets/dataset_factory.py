@@ -32,6 +32,6 @@ def get_dataloader(data,csv_dir, batch_size, split,num_workers, transform=None, 
                             shuffle=is_train,
                             batch_size=batch_size,
                             drop_last=is_train,
-                            num_workers=num_workers,
+                            num_workers=2,
                             pin_memory=False)
     return dataloader

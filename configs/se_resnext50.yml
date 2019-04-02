@@ -20,7 +20,7 @@ loss_classifier:
   
 transform_classifier:
   name: 'policy_transform'
-  num_preprocessor: 8
+  num_preprocessor: 2
   params:
     policies: 'data/best_policy.data'
     per_image_norm: True
