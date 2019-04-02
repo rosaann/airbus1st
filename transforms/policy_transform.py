@@ -29,7 +29,7 @@ POLICIES = [
   ('ElasticTransform',  {'alpha': 1, 'sigma': (30, 70), 'alpha_affine': (30, 70),  'p': [0.0, 0.25, 0.5, 0.75]}),
 ]
 
-img_shape = (224,224,3)
+img_shape = (3,224,224)
 def policy_transform(split,
                      policies=None,
                      size=224,
