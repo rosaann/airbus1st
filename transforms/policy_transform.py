@@ -70,7 +70,7 @@ def policy_transform(split,
   resize = Resize(height=size, width=size, always_apply=True)
 
   def transform(image):
-      image = np.array(image)
+    image = np.array(image)
     if split == 'train':
      # image = base_aug(image=image)['image']
      # if len(aug_list) > 0:
