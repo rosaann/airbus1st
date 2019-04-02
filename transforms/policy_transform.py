@@ -32,7 +32,7 @@ POLICIES = [
 
 def policy_transform(split,
                      policies=None,
-                     size=512,
+                     size=224,
                      per_image_norm=False,
                      mean_std=None,
                      **kwargs):
@@ -75,6 +75,7 @@ def policy_transform(split,
      # if len(aug_list) > 0:
     #     aug = random.choice(aug_list)
     #     image = aug(image=image)['image']
+      print('image shape ', image.shape)
       image = resize(image=image)['image']
     else:
       if size != image.shape[0]:
