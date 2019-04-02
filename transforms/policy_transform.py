@@ -71,10 +71,10 @@ def policy_transform(split,
 
   def transform(image):
     if split == 'train':
-      image = base_aug(image=image)['image']
-      if len(aug_list) > 0:
-        aug = random.choice(aug_list)
-        image = aug(image=image)['image']
+     # image = base_aug(image=image)['image']
+     # if len(aug_list) > 0:
+    #     aug = random.choice(aug_list)
+    #     image = aug(image=image)['image']
       image = resize(image=image)['image']
     else:
       if size != image.shape[0]:
