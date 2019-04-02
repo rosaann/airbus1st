@@ -181,10 +181,10 @@ def train_classifier(config, model, train_dataloader, val_dataloader, criterion,
         f1 = evaluate_classifier_single_epoch(config, model, val_dataloader,
                                    criterion, epoch, writer, postfix_dict)
 
-        if scheduler.name == 'reduce_lr_on_plateau':
-          scheduler.step(f1)
-        elif scheduler.name != 'reduce_lr_on_plateau':
-          scheduler.step()
+      #  if scheduler.name == 'reduce_lr_on_plateau':
+      #    scheduler.step(f1)
+      #  elif scheduler.name != 'reduce_lr_on_plateau':
+      #    scheduler.step()
 
         utils.checkpoint.save_checkpoint(config.train_classifier.dir, model, optimizer, epoch, 0)
 
