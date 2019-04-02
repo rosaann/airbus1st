@@ -4,6 +4,12 @@ train_classifier:
   batch_size: 64
   num_epochs: 23
   num_grad_acc: 4
+  
+train_classifier:
+  dir: './results/se_resnext50'
+  batch_size: 64
+  num_epochs: 23
+  num_grad_acc: 4
 
 eval_classifier:
   batch_size: 20
@@ -14,7 +20,7 @@ loss_classifier:
   
 transform_classifier:
   name: 'policy_transform'
-  num_preprocessor: 4
+  num_preprocessor: 8
   params:
     policies: 'data/best_policy.data'
     per_image_norm: True
