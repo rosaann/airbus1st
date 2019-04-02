@@ -38,7 +38,7 @@ def main():
         if image_name != '7ea963164.jpg':
             results.append((image_id, row['EncodedPixels']))
         
-    results.sort(key=takeSecond, reverse=True)
+   # results.sort(key=takeSecond, reverse=True)
     train_pd = pd.DataFrame.from_records(results, columns=['ImageId', 'EncodedPixels'])
     output_filename = os.path.join(raw_images_dir, 'train_ship_segmentations_v2_2.csv')
     train_pd.to_csv(output_filename, index=False)
