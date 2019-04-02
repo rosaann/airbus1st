@@ -25,6 +25,7 @@ from schedulers.scheduler_factory import get_scheduler
 from utils.utils import prepare_train_directories
 import utils.config
 from utils.checkpoint import *
+from utils.metrics import *
 from models.model_factory import get_model
 
 def inference(model, images):
@@ -139,12 +140,12 @@ def evaluate_classifier_single_epoch(config, model, dataloader, criterion,
         accuracy = np.sum((predictions == labels).astype(float)) / float(predictions.size)
 
         log_dict['acc'] = accuracy
-        log_dict['f1'] = utils.metrics.f1_score(labels, predictions)
+        log_dict['f1'] = f1_score(labels, predictions)
         log_dict['loss'] = sum(loss_list) / len(loss_list)
 
         if writer is not None:
             for l in range(28):
-                f1 = utils.metrics.f1_score(labels[:,l], predictions[:,l], 'binary')
+                f1 = f1_score(labels[:,l], predictions[:,l], 'binary')
                 writer.add_scalar('val/f1_{:02d}'.format(l), f1, epoch)
 
         for key, value in log_dict.items():
