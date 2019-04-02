@@ -39,7 +39,7 @@ class DefaultClassifierDataset(Dataset):
             encoder_r = row['EncodedPixels']
             if len(str(encoder_r)) > 1:
                 ship = [1]
-            self.datalist.append({'p':img_path, 's':ship})
+            self.datalist.append({'p':img_path, 's':ship, 'i':v})
         
    
 
@@ -52,10 +52,12 @@ class DefaultClassifierDataset(Dataset):
         ship = example['s']
 
         if self.transform is not None:
+            print('image_name :', example['i'])
             image = self.transform(image)
 
         return {'image': image,
-                'label': np.array(ship)
+                'label': np.array(ship),
+                
                 }
 
     def __len__(self):
