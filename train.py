@@ -141,19 +141,19 @@ def evaluate_classifier_single_epoch(config, model, dataloader, criterion,
 
         log_dict['acc'] = accuracy
         log_dict['f1'] = f1_score(labels, predictions)
-        log_dict['loss'] = sum(loss_list) / len(loss_list)
+       # log_dict['loss'] = sum(loss_list) / len(loss_list)
 
-        if writer is not None:
-            for l in range(28):
-                f1 = f1_score(labels[:,l], predictions[:,l], 'binary')
-                writer.add_scalar('val/f1_{:02d}'.format(l), f1, epoch)
+      #  if writer is not None:
+      #      for l in range(28):
+      #          f1 = f1_score(labels[:,l], predictions[:,l], 'binary')
+      #          writer.add_scalar('val/f1_{:02d}'.format(l), f1, epoch)
 
         for key, value in log_dict.items():
             if writer is not None:
                 writer.add_scalar('val/{}'.format(key), value, epoch)
             postfix_dict['val/{}'.format(key)] = value
 
-        return f1
+        return log_dict['f1']
 def train_classifier(config, model, train_dataloader, val_dataloader, criterion, optimizer, scheduler, writer, start_epoch):
     num_epochs = config.train_classifier.num_epochs
     
