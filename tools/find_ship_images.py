@@ -35,7 +35,7 @@ def main():
         encoder = row['EncodedPixels']
         
      #   if encoder is not float('nan'):
-        if isinstance(encoder,str)::
+        if isinstance(encoder,str):
             index_list.append(i)
             print('in ', i, ' e ', encoder)
             continue
