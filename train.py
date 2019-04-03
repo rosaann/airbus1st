@@ -33,7 +33,7 @@ from scipy import ndimage
 def extract_instance_masks_from_binary_mask(args):
     _id, binary_mask = args
     masks = []
-    labelled_mask = ndimage.label(binary_mask)[0]
+    labelled_mask = ndimage.label(binary_mask.detach().numpy())[0]
     print('labelled_mask shape ', labelled_mask.shape, ' labelled_mask ', labelled_mask)
     labels, areas = np.unique(labelled_mask, return_counts=True)
     print('labels shape ', labels.shape, ' labels ', labels)
