@@ -49,10 +49,15 @@ def extract_instance_masks_from_binary_mask(args):
 def encode_rle(args):
     _id, mask = args
     if mask is None: return (_id, None)
+    print('mask shape ', mask.shape, ' mask ', mask)
     pixels = mask.T.flatten()
+    print('mask1 shape ', mask.shape, ' mask ', mask)
     pixels = np.concatenate([[0], pixels, [0]])
+    print('pixels shape ', pixels.shape, ' pixels ', pixels)
     runs = np.where(pixels[1:] != pixels[:-1])[0] + 1
+    print('runs shape ', runs.shape, ' runs ', pixels)
     runs[1::2] -= runs[::2]
+    print('runs1 shape ', runs.shape, ' runs ', pixels)
     return (_id, ' '.join(str(x) for x in runs))
 
 def postprocess_segmentation(pool, ids, binary_masks):
