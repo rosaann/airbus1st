@@ -62,7 +62,7 @@ class Resnet18Segmenter(torch.nn.Module):
         x = self.decoder2(x) + x2
         x = self.decoder3(x) + x1
         x = self.decoder4(x)
-        return {'mask': self.classifier(x)}
+        return  self.classifier(x)
     
 class Resnet18Classifier(torch.nn.Module):
     def __init__(self, num_classes):
