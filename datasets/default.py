@@ -53,7 +53,7 @@ class DefaultSegmenterDataset(Dataset):
         shape = image.shape
         h = shape[0]
         w = shape[1]
-        mask = np.range((w, h))
+        mask = np.array((w, h))
         
         encoder = example['s']
         
