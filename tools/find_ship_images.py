@@ -35,10 +35,11 @@ def main():
         encoder = row['EncodedPixels']
         
      #   if encoder is not float('nan'):
-        if encoder is not np.nan:
+        if not np.isnan(encoder):
             index_list.append(i)
             print('in ', i, ' e ', encoder)
             continue
+        
         if len(encoder) >1:
             index_list.append(i)
         
