@@ -27,6 +27,7 @@ import utils.config
 from utils.checkpoint import *
 from utils.metrics import *
 from models.model_factory import get_model
+from multiprocessing.pool import ThreadPool
 
 
 def extract_instance_masks_from_binary_mask(args):
