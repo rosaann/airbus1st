@@ -39,7 +39,7 @@ def _get_default_config():
   c.train_classifier.num_grad_acc = None
   
   c.train_segmenter = edict()
-  c.train_segmenter.dir = './result/out/classifier/'
+  c.train_segmenter.dir = './result/out/segmenter/'
   c.train_segmenter.batch_size = 64
   c.train_segmenter.num_epochs = 2000
   c.train_segmenter.num_grad_acc = None

@@ -49,7 +49,7 @@ def main():
     
     train_data = []
     for i in tqdm.tqdm(range(train_num)):
-        img_id = df_train.get_value(i, 'ImageId')
+        img_id = df_train.get_value(index_list[i], 'ImageId')
         encoder_p = df_train.get_value(i, 'EncodedPixels')
         train_data.append((img_id, encoder_p))
     
@@ -59,17 +59,17 @@ def main():
     
     val_data = []
     for i in tqdm.tqdm(range(val_num)):
-        img_id = df_train.get_value(i, 'ImageId')
+        img_id = df_train.get_value(index_list[i], 'ImageId')
         encoder_p = df_train.get_value(i, 'EncodedPixels')
         val_data.append((img_id, encoder_p))
     
     val_pd = pd.DataFrame.from_records(val_data, columns=['ImageId', 'EncodedPixels'])
-    output_filename = os.path.join(raw_images_dir, 'data_val_segmenter.csv')
+    output_filename = os.path.join(raw_images_dir, 'data_eval_segmenter.csv')
     val_pd.to_csv(output_filename, index=False)
 
     test_data = []
     for i in tqdm.tqdm(range(test_num)):
-        img_id = df_train.get_value(i, 'ImageId')
+        img_id = df_train.get_value(index_list[i], 'ImageId')
         encoder_p = df_train.get_value(i, 'EncodedPixels')
         test_data.append((img_id, encoder_p))
     

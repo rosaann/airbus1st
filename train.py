@@ -117,11 +117,11 @@ def evaluate_classifier_single_epoch(config, model, dataloader, criterion,
             logits, aux_logits, probabilities = inference(model, images)
 
             
-          #  loss = criterion(logits, labels.float())
+            loss = criterion(logits, labels.float())
           #  if aux_logits is not None:
           #      aux_loss = criterion(aux_logits, labels.float())
           #      loss = loss + 0.4 * aux_loss
-          #  loss_list.append(loss.item())
+            loss_list.append(loss.item())
 
             probability_list.extend(probabilities.cpu().numpy())
             label_list.extend(labels.cpu().numpy())
@@ -141,7 +141,7 @@ def evaluate_classifier_single_epoch(config, model, dataloader, criterion,
 
         log_dict['acc'] = accuracy
         log_dict['f1'] = f1_score(labels, predictions)
-       # log_dict['loss'] = sum(loss_list) / len(loss_list)
+        log_dict['loss'] = sum(loss_list) / len(loss_list)
 
       #  if writer is not None:
       #      for l in range(28):
@@ -205,7 +205,7 @@ def run(config):
     if torch.cuda.is_available():
         model_classifier = model_classifier.cuda()
         model_segmenter = model_segmenter.cuda()
-    criterion = get_loss(config.loss_classifier)
+    criterion_classifier = get_loss(config.loss_classifier)
     optimizer_classifier = get_optimizer(config.optimizer_classifier.name, model_classifier.parameters(), config.optimizer_classifier.params)
     optimizer_segmenter = get_optimizer(config.optimizer_segmenter.name, model_segmenter.parameters(), config.optimizer_segmenter.params)
 
@@ -216,18 +216,31 @@ def run(config):
     else:
         last_epoch, step = -1, -1
 
-    print('from checkpoint: {} last epoch:{}'.format(checkpoint_classifier, last_epoch))
-  #  scheduler = get_scheduler(config, optimizer, last_epoch)
-    scheduler = 'none'
-    train_dataloaders = get_dataloader(config.data_classifier, './data/data_train.csv',config.train_classifier.batch_size, 'train',config.transform_classifier.num_preprocessor, get_transform(config.transform_classifier, 'train'))
-    val_dataloaders = get_dataloader(config.data_classifier, './data/data_val.csv',config.eval_classifier.batch_size, 'val', config.transform_classifier.num_preprocessor, get_transform(config.transform_classifier, 'val'))
-  #  test_dataloaders = get_dataloader(config.data_classifier,'./data/data_test.csv', get_transform(config, 'test'))
-
+    print('from classifier checkpoint: {} last epoch:{}'.format(checkpoint_classifier, last_epoch))
     
+    ####
+    checkpoint_segmenter = get_initial_checkpoint(config.train_segmenter.dir)
+    if checkpoint_segmenter is not None:
+        last_epoch, step = load_checkpoint(model_segmenter, optimizer_segmenter, checkpoint_segmenter)
+    else:
+        last_epoch, step = -1, -1
 
+    print('from segmenter checkpoint: {} last epoch:{}'.format(checkpoint_segmenter, last_epoch))
+  #  scheduler = get_scheduler(config, optimizer, last_epoch)
+  
     writer = SummaryWriter(config.train.dir)
-    train_classifier(config, model_classifier, train_dataloaders,val_dataloaders, criterion, optimizer_classifier, scheduler,
-          writer, last_epoch+1)
+    
+    scheduler = 'none'
+    train_classifier_dataloaders = get_dataloader(config.data_classifier, './data/data_train.csv',config.train_classifier.batch_size, 'train',config.transform_classifier.num_preprocessor, get_transform(config.transform_classifier, 'train'))
+    val_classifier_dataloaders = get_dataloader(config.data_classifier, './data/data_val.csv',config.eval_classifier.batch_size, 'val', config.transform_classifier.num_preprocessor, get_transform(config.transform_classifier, 'val'))
+  #  test_dataloaders = get_dataloader(config.data_classifier,'./data/data_test.csv', get_transform(config, 'test'))
+       
+  #  train_classifier(config, model_classifier, train_classifier_dataloaders,val_classifier_dataloaders, criterion_classifier, optimizer_classifier, scheduler,
+  #        writer, last_epoch+1)
+    
+    train_segmenter_dataloaders = get_dataloader(config.data_classifier, './data/data_train_segmenter.csv',config.train_classifier.batch_size, 'train',config.transform_classifier.num_preprocessor, get_transform(config.transform_classifier, 'train'))
+    val_segmenter_dataloaders = get_dataloader(config.data_classifier, './data/data_train_segmenter.csv',config.eval_classifier.batch_size, 'val', config.transform_classifier.num_preprocessor, get_transform(config.transform_classifier, 'val'))
+  
 
 def parse_args():
     parser = argparse.ArgumentParser(description='airbus')
