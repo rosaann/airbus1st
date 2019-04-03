@@ -370,9 +370,12 @@ def run(config):
   #  train_classifier(config, model_classifier, train_classifier_dataloaders,eval_classifier_dataloaders, criterion_classifier, optimizer_classifier, scheduler,
   #        writer, last_epoch+1)
     
+    criterion_segmenter = get_loss(config.loss_classifier)
     train_segmenter_dataloaders = get_dataloader(config.data_segmenter, './data/data_train_segmenter.csv',config.train_segmenter.batch_size, 'train',config.transform_segmenter.num_preprocessor, get_transform(config.transform_segmenter, 'train'))
     eval_segmenter_dataloaders = get_dataloader(config.data_segmenter, './data/data_eval_segmenter.csv',config.eval_segmenter.batch_size, 'val', config.transform_segmenter.num_preprocessor, get_transform(config.transform_segmenter, 'val'))
   
+    train_segmenter(config, model_segmenter, train_segmenter_dataloaders,eval_segmenter_dataloaders, criterion_segmenter, optimizer_segmenter, scheduler,
+          writer, last_epoch+1)
 
 def parse_args():
     parser = argparse.ArgumentParser(description='airbus')
