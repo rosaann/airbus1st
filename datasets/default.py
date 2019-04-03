@@ -11,6 +11,8 @@ from PIL import Image as pil_image
 import cv2
 
 from torch.utils.data.dataset import Dataset
+from torchvision import transforms
+
 
 class DefaultSegmenterDataset(Dataset):
     def __init__(self,
