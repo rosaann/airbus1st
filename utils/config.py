@@ -80,6 +80,10 @@ def _get_default_config():
   c.loss_classifier = edict()
   c.loss_classifier.name = None
   c.loss_classifier.params = edict()
+  
+  c.loss_segmenter = edict()
+  c.loss_segmenter.name = None
+  c.loss_segmenter.params = edict()
 
   return c
 
