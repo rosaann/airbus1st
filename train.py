@@ -62,7 +62,7 @@ def encode_rle(args):
 
 def postprocess_segmentation(pool, ids, binary_masks):
     ids_and_instance_masks = map(extract_instance_masks_from_binary_mask, zip(ids, binary_masks))
-    print('ids_and_instance_masks ', ids_and_instance_masks)
+    print('ids_and_instance_masks ', len(ids_and_instance_masks))
     return map(encode_rle, sum(ids_and_instance_masks, []))
 
 pool = ThreadPool(2)
