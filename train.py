@@ -28,13 +28,17 @@ from utils.checkpoint import *
 from utils.metrics import *
 from models.model_factory import get_model
 from multiprocessing.pool import ThreadPool
-
+from scipy import ndimage
 
 def extract_instance_masks_from_binary_mask(args):
     _id, binary_mask = args
     masks = []
     labelled_mask = ndimage.label(binary_mask)[0]
+    print('labelled_mask shape ', labelled_mask.shape, ' labelled_mask ', labelled_mask)
     labels, areas = np.unique(labelled_mask, return_counts=True)
+    print('labels shape ', labels.shape, ' labels ', labels)
+    print('areas shape ', areas.shape, ' areas ', areas)
+    
     labels = labels[areas >= 80]
     for label in labels:
         if label == 0: continue
