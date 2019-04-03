@@ -36,9 +36,10 @@ def main():
         
      #   if encoder is not float('nan'):
         if isinstance(encoder,str):
-            index_list.append(i)
-            print('in ', i, ' e ', encoder)
-            continue
+            if len(encoder) > 1:
+              index_list.append(i)
+           # print('in ', i, ' e ', encoder)
+              continue
         
       #  if len(encoder) >1:
       #      index_list.append(i)
@@ -54,7 +55,7 @@ def main():
     train_data = []
     for i in tqdm.tqdm(range(train_num)):
         img_id = df_train.get_value(index_list[i], 'ImageId')
-        encoder_p = df_train.get_value(i, 'EncodedPixels')
+        encoder_p = df_train.get_value(index_list[i], 'EncodedPixels')
         train_data.append((img_id, encoder_p))
     
     train_pd = pd.DataFrame.from_records(train_data, columns=['ImageId', 'EncodedPixels'])
@@ -64,7 +65,7 @@ def main():
     val_data = []
     for i in tqdm.tqdm(range(val_num)):
         img_id = df_train.get_value(index_list[i], 'ImageId')
-        encoder_p = df_train.get_value(i, 'EncodedPixels')
+        encoder_p = df_train.get_value(index_list[i], 'EncodedPixels')
         val_data.append((img_id, encoder_p))
     
     val_pd = pd.DataFrame.from_records(val_data, columns=['ImageId', 'EncodedPixels'])
@@ -74,7 +75,7 @@ def main():
     test_data = []
     for i in tqdm.tqdm(range(test_num)):
         img_id = df_train.get_value(index_list[i], 'ImageId')
-        encoder_p = df_train.get_value(i, 'EncodedPixels')
+        encoder_p = df_train.get_value(index_list[i], 'EncodedPixels')
         test_data.append((img_id, encoder_p))
     
     test_pd = pd.DataFrame.from_records(test_data, columns=['ImageId', 'EncodedPixels'])
