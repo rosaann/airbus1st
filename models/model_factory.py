@@ -49,7 +49,7 @@ class Resnet18Segmenter(torch.nn.Module):
         )
 
     def forward(self, x):
-        x = x['image']
+        
         x = self.resnet.conv1(x)
         x = self.resnet.bn1(x)
         x = self.resnet.relu(x)
