@@ -89,6 +89,7 @@ def train_segmenter_single_epoch(config, model, dataloader, criterion, optimizer
         binary_masks = model(images)
         print('binary_masks ', binary_masks.shape, ' mask ',binary_masks )
         remaining_ids = list(map(lambda path: path.split('/')[-1], paths))
+        print('remaining_ids ', remaining_ids)
         results = postprocess_segmentation(pool, remaining_ids[:len(binary_masks)], binary_masks)
       #  print('logits ', logits.shape)
       #  print('labels ', labels.shape)
