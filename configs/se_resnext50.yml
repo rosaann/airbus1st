@@ -6,7 +6,7 @@ train_classifier:
   num_grad_acc: 4
   
 train_segmenter:
-  dir: './result/out/segmenter/se_resnext50'
+  dir: './result/out/segmenter/resnet18_segmenter'
   batch_size: 24
   num_epochs: 23
   num_grad_acc: 4
@@ -31,6 +31,13 @@ transform_classifier:
     per_image_norm: True
     size: 224
 
+transform_segmenter:
+  name: 'policy_transform'
+  num_preprocessor: 8
+  params:
+
+    per_image_norm: True
+    size: 224
 
 model_classifier:
     name: 'se_resnext50'

@@ -11,6 +11,7 @@ import torchvision.models
 import pretrainedmodels
 
 
+
 class Decoder(torch.nn.Module):
     def __init__(self, in_channels, out_channels, stride, output_padding):
         super().__init__()

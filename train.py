@@ -28,6 +28,138 @@ from utils.checkpoint import *
 from utils.metrics import *
 from models.model_factory import get_model
 
+
+def extract_instance_masks_from_binary_mask(args):
+    _id, binary_mask = args
+    masks = []
+    labelled_mask = ndimage.label(binary_mask)[0]
+    labels, areas = np.unique(labelled_mask, return_counts=True)
+    labels = labels[areas >= 80]
+    for label in labels:
+        if label == 0: continue
+        masks.append((_id, labelled_mask == label))
+    if len(masks) < 1: return [(_id, None)]
+    return masks
+
+def encode_rle(args):
+    _id, mask = args
+    if mask is None: return (_id, None)
+    pixels = mask.T.flatten()
+    pixels = np.concatenate([[0], pixels, [0]])
+    runs = np.where(pixels[1:] != pixels[:-1])[0] + 1
+    runs[1::2] -= runs[::2]
+    return (_id, ' '.join(str(x) for x in runs))
+
+def postprocess_segmentation(pool, ids, binary_masks):
+    ids_and_instance_masks = map(extract_instance_masks_from_binary_mask, zip(ids, binary_masks))
+    return map(encode_rle, sum(ids_and_instance_masks, []))
+
+pool = ThreadPool(2)
+def train_segmenter_single_epoch(config, model, dataloader, criterion, optimizer,
+                       epoch, writer, postfix_dict):
+    model.train()
+
+    batch_size = config.train_segmenter.batch_size
+    total_size = len(dataloader.dataset)
+    total_step = math.ceil(total_size / batch_size)
+
+    log_dict = {}
+    tbar = tqdm.tqdm(enumerate(dataloader), total=total_step)
+    for i, data in tbar:
+        images = data['image']
+        labels = data['mask']
+        paths = data['name']
+    #    print('images ', images.shape)
+   #     print('labels ', labels)
+        if torch.cuda.is_available():
+            images = images.cuda()
+            labels = labels.cuda()
+        
+        binary_masks = model(images)
+        print('binary_masks ', binary_masks.shape)
+        remaining_ids = list(map(lambda path: path.split('/')[-1], paths))
+        results = postprocess_segmentation(pool, remaining_ids[:len(binary_masks)], binary_masks)
+      #  print('logits ', logits.shape)
+      #  print('labels ', labels.shape)
+        loss = criterion(logits, labels.float())
+        if aux_logits is not None:
+            aux_loss = criterion(aux_logits, labels.float())
+            loss = loss + 0.4 * aux_loss
+        log_dict['loss'] = loss.item()
+
+        predictions = (probabilities > 0.5).long()
+        accuracy = (predictions == labels).sum().float() / float(predictions.numel())
+        log_dict['acc'] = accuracy.item()
+
+        loss.backward()
+
+        if config.train_classifier.num_grad_acc is None:
+            optimizer.step()
+            optimizer.zero_grad()
+        elif (i+1) % config.train_classifier.num_grad_acc == 0:
+            optimizer.step()
+            optimizer.zero_grad()
+
+        f_epoch = epoch + i / total_step
+
+        log_dict['lr'] = optimizer.param_groups[0]['lr']
+        for key, value in log_dict.items():
+            postfix_dict['train/{}'.format(key)] = value
+
+        desc = '{:5s}'.format('train')
+        desc += ', {:06d}/{:06d}, {:.2f} epoch'.format(i, total_step, f_epoch)
+        tbar.set_description(desc)
+        tbar.set_postfix(**postfix_dict)
+
+        if i % 100 == 0:
+            log_step = int(f_epoch * 10000)
+            if writer is not None:
+                for key, value in log_dict.items():
+                    writer.add_scalar('train/{}'.format(key), value, log_step)
+                    
+def train_segmenter(config, model, train_dataloader, eval_dataloader, criterion, optimizer, scheduler, writer, start_epoch):
+    num_epochs = config.train_segmenter.num_epochs
+    
+    if torch.cuda.device_count() > 1:
+        model = torch.nn.DataParallel(model)
+    if torch.cuda.is_available():
+        model = model.cuda()
+
+    postfix_dict = {'train/lr': 0.0,
+                    'train/acc': 0.0,
+                    'train/loss': 0.0,
+                    'val/f1': 0.0,
+                    'val/acc': 0.0,
+                    'val/loss': 0.0}
+
+    f1_list = []
+    best_f1 = 0.0
+    best_f1_mavg = 0.0
+    for epoch in range(start_epoch, num_epochs):
+        # train phase
+        train_segmenter_single_epoch(config, model, train_dataloader,
+                           criterion, optimizer, epoch, writer, postfix_dict)
+
+        # val phase
+        f1 = evaluate_classifier_single_epoch(config, model, val_dataloader,
+                                   criterion, epoch, writer, postfix_dict)
+
+      #  if scheduler.name == 'reduce_lr_on_plateau':
+      #    scheduler.step(f1)
+      #  elif scheduler.name != 'reduce_lr_on_plateau':
+      #    scheduler.step()
+
+        utils.checkpoint.save_checkpoint(config.train_classifier.dir, model, optimizer, epoch, 0)
+
+        f1_list.append(f1)
+        f1_list = f1_list[-10:]
+        f1_mavg = sum(f1_list) / len(f1_list)
+
+        if f1 > best_f1:
+            best_f1 = f1
+        if f1_mavg > best_f1_mavg:
+            best_f1_mavg = f1_mavg
+    return {'f1': best_f1, 'f1_mavg': best_f1_mavg}
 def inference(model, images):
     logits = model(images)
   #  print('logits ', logits)
@@ -232,14 +364,14 @@ def run(config):
     
     scheduler = 'none'
     train_classifier_dataloaders = get_dataloader(config.data_classifier, './data/data_train.csv',config.train_classifier.batch_size, 'train',config.transform_classifier.num_preprocessor, get_transform(config.transform_classifier, 'train'))
-    val_classifier_dataloaders = get_dataloader(config.data_classifier, './data/data_eval.csv',config.eval_classifier.batch_size, 'val', config.transform_classifier.num_preprocessor, get_transform(config.transform_classifier, 'val'))
+    eval_classifier_dataloaders = get_dataloader(config.data_classifier, './data/data_eval.csv',config.eval_classifier.batch_size, 'val', config.transform_classifier.num_preprocessor, get_transform(config.transform_classifier, 'val'))
   #  test_dataloaders = get_dataloader(config.data_classifier,'./data/data_test.csv', get_transform(config, 'test'))
        
-  #  train_classifier(config, model_classifier, train_classifier_dataloaders,val_classifier_dataloaders, criterion_classifier, optimizer_classifier, scheduler,
+  #  train_classifier(config, model_classifier, train_classifier_dataloaders,eval_classifier_dataloaders, criterion_classifier, optimizer_classifier, scheduler,
   #        writer, last_epoch+1)
     
-    train_segmenter_dataloaders = get_dataloader(config.data_classifier, './data/data_train_segmenter.csv',config.train_classifier.batch_size, 'train',config.transform_classifier.num_preprocessor, get_transform(config.transform_classifier, 'train'))
-    val_segmenter_dataloaders = get_dataloader(config.data_classifier, './data/data_train_segmenter.csv',config.eval_classifier.batch_size, 'val', config.transform_classifier.num_preprocessor, get_transform(config.transform_classifier, 'val'))
+    train_segmenter_dataloaders = get_dataloader(config.data_segmenter, './data/data_train_segmenter.csv',config.train_segmenter.batch_size, 'train',config.transform_segmenter.num_preprocessor, get_transform(config.transform_segmenter, 'train'))
+    eval_segmenter_dataloaders = get_dataloader(config.data_segmenter, './data/data_eval_segmenter.csv',config.eval_segmenter.batch_size, 'val', config.transform_segmenter.num_preprocessor, get_transform(config.transform_segmenter, 'val'))
   
 
 def parse_args():
