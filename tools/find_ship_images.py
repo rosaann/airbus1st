@@ -34,7 +34,8 @@ def main():
     for i, row in tqdm.tqdm(df_train.iterrows()):
         encoder = row['EncodedPixels']
         
-        if encoder is not float('nan'):
+     #   if encoder is not float('nan'):
+        if encoder is not np.nan:
             index_list.append(i)
             print('in ', i, ' e ', encoder)
             continue
