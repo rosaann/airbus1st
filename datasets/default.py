@@ -50,6 +50,16 @@ class DefaultSegmenterDataset(Dataset):
         filename = example['p']
         #image = misc.imread(filename)
         image = cv2.imread(filename )
+        
+        transform = transforms.Compose([
+                transforms.ToPILImage(),
+                transforms.ToTensor(), # range [0, 255] -> [0.0,1.0]
+                transforms.Normalize([0.5,0.5,0.5], [0.5,0.5,0.5]),
+                transforms.Normalize(mean = (0.5, 0.5, 0.5), std = (0.5, 0.5, 0.5))
+                ])
+    
+        image = transform(image)
+        
         shape = image.shape
         h = shape[0]
         w = shape[1]
