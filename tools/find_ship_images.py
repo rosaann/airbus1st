@@ -14,7 +14,7 @@ import random
 import tqdm
 import numpy as np
 import pandas as pd
-
+from math import isnan
 
 def parse_args():
     parser = argparse.ArgumentParser()
@@ -35,7 +35,7 @@ def main():
         encoder = row['EncodedPixels']
         
      #   if encoder is not float('nan'):
-        if not np.isnan(encoder):
+        if not isnan(encoder):
             index_list.append(i)
             print('in ', i, ' e ', encoder)
             continue
