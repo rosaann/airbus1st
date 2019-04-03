@@ -33,10 +33,10 @@ def main():
     index_list = []
     for i, row in tqdm.tqdm(df_train.iterrows()):
         encoder = row['EncodedPixels']
-        print('in ', i, ' e ', encoder)
-        if encoder != float('nan'):
+        
+        if encoder is not np.nan:
             index_list.append(i)
-            
+            print('in ', i, ' e ', encoder)
             continue
         if len(encoder) >1:
             index_list.append(i)
