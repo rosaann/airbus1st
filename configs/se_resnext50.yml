@@ -35,7 +35,6 @@ transform_segmenter:
   name: 'policy_transform'
   num_preprocessor: 8
   params:
-
     per_image_norm: True
     size: 224
 
