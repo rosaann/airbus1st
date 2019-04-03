@@ -40,8 +40,8 @@ def main():
             print('in ', i, ' e ', encoder)
             continue
         
-        if len(encoder) >1:
-            index_list.append(i)
+      #  if len(encoder) >1:
+      #      index_list.append(i)
         
     num = len(index_list)
     print('total ', num)
