@@ -55,7 +55,7 @@ class DefaultSegmenterDataset(Dataset):
         w = shape[1]
         mask = np.array((w, h))
         
-        encoder = example['s']
+        encoder = example['e']
         
        # if self.transform is not None:
            # print('image_name :', example['i'])
