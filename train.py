@@ -92,9 +92,11 @@ def train_segmenter_single_epoch(config, model, dataloader, criterion, optimizer
 
     log_dict = {}
     tbar = tqdm.tqdm(enumerate(dataloader), total=total_step)
+    
+    total_loss = 0
     for i, data in tbar:
         images = data['image']
-        labels = data['mask']
+        gt = data['gt']
         paths = data['name']
     #    print('images ', images.shape)
    #     print('labels ', labels)
@@ -103,23 +105,20 @@ def train_segmenter_single_epoch(config, model, dataloader, criterion, optimizer
            # labels = labels.cuda()
         
         binary_masks = model(images)
-        print('binary_masks ', binary_masks.shape, ' mask ',binary_masks )
-        remaining_ids = list(map(lambda path: path.split('/')[-1], paths))
-        print('remaining_ids ', remaining_ids)
-        results = postprocess_segmentation(pool, remaining_ids[:len(binary_masks)], binary_masks)
+        loss = criterion(binary_masks, gt)
+
+            # measure accuracy and record loss
+        total_loss += loss.item()
+
+            # compute gradient and do SGD step
+        optimizer.zero_grad()
+        loss.backward()
+     #   print('binary_masks ', binary_masks.shape, ' mask ',binary_masks )
+    #    remaining_ids = list(map(lambda path: path.split('/')[-1], paths))
+    #    print('remaining_ids ', remaining_ids)
+    #    results = postprocess_segmentation(pool, remaining_ids[:len(binary_masks)], binary_masks)
       #  print('logits ', logits.shape)
       #  print('labels ', labels.shape)
-        loss = criterion(logits, labels.float())
-        if aux_logits is not None:
-            aux_loss = criterion(aux_logits, labels.float())
-            loss = loss + 0.4 * aux_loss
-        log_dict['loss'] = loss.item()
-
-        predictions = (probabilities > 0.5).long()
-        accuracy = (predictions == labels).sum().float() / float(predictions.numel())
-        log_dict['acc'] = accuracy.item()
-
-        loss.backward()
 
         if config.train_classifier.num_grad_acc is None:
             optimizer.step()
@@ -139,11 +138,11 @@ def train_segmenter_single_epoch(config, model, dataloader, criterion, optimizer
         tbar.set_description(desc)
         tbar.set_postfix(**postfix_dict)
 
-        if i % 100 == 0:
-            log_step = int(f_epoch * 10000)
-            if writer is not None:
-                for key, value in log_dict.items():
-                    writer.add_scalar('train/{}'.format(key), value, log_step)
+        
+    log_dict['loss'] = total_loss
+    if writer is not None:
+        for key, value in log_dict.items():
+            writer.add_scalar('train/{}'.format(key), value, epoch)
                     
 def train_segmenter(config, model, train_dataloader, eval_dataloader, criterion, optimizer, scheduler, writer, start_epoch):
     num_epochs = config.train_segmenter.num_epochs

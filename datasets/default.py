@@ -29,6 +29,7 @@ class DefaultSegmenterDataset(Dataset):
         self.transform = transform
         self.csv_dir = csv_dir
         self.images_dir = images_dir
+        self.images_gt_dir = './data/ship_train_v2_gt/'
         self.load_data()
 
     def load_data(self):
@@ -38,42 +39,9 @@ class DefaultSegmenterDataset(Dataset):
         for _, row in df.iterrows():
             v = row['ImageId']
             img_path = os.path.join(self.images_dir, v )
+            gt_path = os.path.join(self.images_gt_dir, (v.split('.')[0] + '.png'))
             
-            encoder_r = row['EncodedPixels']
-            image = cv2.imread(img_path )
-            shape = image.shape
-            h = shape[0]
-            w = shape[1]
-            mask = np.zeros(w * h)
-            encoder = encoder_r
-            if v == '4c9da9e4c.jpg':  
-                print('id ', v)
-          #  print('w ', w)
-          #  print('h ', h)
-                print('e ', encoder)
-            en_list = encoder.split(' ')
-            total = w * h
-            for i, start in enumerate( en_list):
-                if i % 2 == 0:
-                   # print('start aaa ', start)
-                    num = en_list[i + 1]
-                 #   print('num ', num)
-                    for n_i in range(int(num)):
-                        s= int(start)
-                        if v == '4c9da9e4c.jpg':  
-                           print('start ', s)
-                           print('n_i ', n_i)
-                        index = s + n_i 
-                        if index < total:
-                            mask[s + n_i] = 1
-            mask.resize((w, h))
-            mask = np.transpose(mask, (1, 0))
-            image2 = pil_image.fromarray(mask * 255)
-            image2 = image2.convert("1")
-            if v == '4c9da9e4c.jpg':   
-                path_this = v.split('.')[0] + '.bmp'
-                image2.save(path_this )
-            self.datalist.append({'p':img_path, 'e':encoder_r, 'i':v})
+            self.datalist.append({'p':img_path, 'gt':gt_path, 'i':v})
            # if len(self.datalist) >= 1000:
            #     break
    
@@ -94,18 +62,22 @@ class DefaultSegmenterDataset(Dataset):
     
         image = transform(image)
         
-        shape = image.shape
-        h = shape[0]
-        w = shape[1]
+        gt_path = example['gt']
+        gt_img = cv2.imread(gt_path)
         
-        
+        transform_gt = transforms.Compose([
+                transforms.ToPILImage(),
+                transforms.ToTensor(), # range [0, 255] -> [0.0,1.0]
+                ])
+    
+        gt_img = transform_gt(gt_img)
         
        # if self.transform is not None:
            # print('image_name :', example['i'])
            # image = self.transform(image)
 
         return {'image': image,
-                'mask': mask,
+                'gt': gt_img,
                 'name':filename
                 }
 
