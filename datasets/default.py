@@ -70,8 +70,8 @@ class DefaultSegmenterDataset(Dataset):
             image2 = pil_image.fromarray(mask)
             image2 = image2.convert("1")
             if v == '5ecd6788b.jpg':   
-              #  path_this = v.split('.')[0] + '.bmp'
-                image2.save(v )
+                path_this = v.split('.')[0] + '.bmp'
+                image2.save(path_this )
             self.datalist.append({'p':img_path, 'e':encoder_r, 'i':v})
            # if len(self.datalist) >= 1000:
            #     break
