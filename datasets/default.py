@@ -41,6 +41,7 @@ class DefaultSegmenterDataset(Dataset):
             
             encoder_r = row['EncodedPixels']
             
+            
             self.datalist.append({'p':img_path, 'e':encoder_r, 'i':v})
            # if len(self.datalist) >= 1000:
            #     break
@@ -65,16 +66,23 @@ class DefaultSegmenterDataset(Dataset):
         shape = image.shape
         h = shape[0]
         w = shape[1]
-        mask = np.array((w, h))
-        
+        mask = np.zeros(w * h)
         encoder = example['e']
+        for i, start in encoder:
+            if i % 2 == 0:
+                num = encoder[i + 1]
+                for n_i in range(num):
+                    mask[start + n_i] = 1
         
+        mask.resize((h, w))
+        image2 = pil_image.fromarray(mask)
+        image2.save(example['v'] + 'jpg')
        # if self.transform is not None:
            # print('image_name :', example['i'])
            # image = self.transform(image)
 
         return {'image': image,
-                'mask': encoder,
+                'mask': mask,
                 'name':filename
                 }
 
