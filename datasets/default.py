@@ -71,6 +71,7 @@ class DefaultSegmenterDataset(Dataset):
         print('id ', example['p'])
         for i, start in enumerate( encoder):
             if i % 2 == 0:
+                print('start aaa ', start)
                 num = encoder[i + 1]
                 for n_i in range(int(num)):
                     s= int(start)
