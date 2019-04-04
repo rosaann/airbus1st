@@ -75,6 +75,7 @@ class DefaultSegmenterDataset(Dataset):
             if i % 2 == 0:
                 print('start aaa ', start)
                 num = en_list[i + 1]
+                print('num ', num)
                 for n_i in range(int(num)):
                     s= int(start)
                     print('start ', s)
