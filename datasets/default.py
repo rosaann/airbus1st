@@ -46,12 +46,13 @@ class DefaultSegmenterDataset(Dataset):
             w = shape[1]
             mask = np.zeros(w * h)
             encoder = encoder_r
-           # if v == '5ecd6788b.jpg':  
-            print('id ', v)
-            print('w ', w)
-            print('h ', h)
-            print('e ', encoder)
+            if v == '5ecd6788b.jpg':  
+                print('id ', v)
+          #  print('w ', w)
+          #  print('h ', h)
+                print('e ', encoder)
             en_list = encoder.split(' ')
+            total = w * h
             for i, start in enumerate( en_list):
                 if i % 2 == 0:
                    # print('start aaa ', start)
@@ -62,7 +63,9 @@ class DefaultSegmenterDataset(Dataset):
                         if v == '5ecd6788b.jpg':  
                            print('start ', s)
                            print('n_i ', n_i)
-                        mask[s + n_i] = 1
+                        index = s + n_i 
+                        if index < total:
+                            mask[s + n_i] = 1
             mask.resize((h, w))
             image2 = pil_image.fromarray(mask)
             image2 = image2.convert("1")
