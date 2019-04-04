@@ -69,12 +69,12 @@ class DefaultSegmenterDataset(Dataset):
         
         transform_gt = transforms.Compose([
                 transforms.ToPILImage(),
-                #transforms.ToTensor(), # range [0, 255] -> [0.0,1.0]
+                transforms.ToTensor(), # range [0, 255] -> [0.0,1.0]
                 ])
-        gt_img = np.array(gt_img)
+        gt_img = gt_img * 255
         gt_img = transform_gt(gt_img)
       #  print('gt_img2 ', gt_img.shape)
-        gt_img = torch.sum(gt_img, dim = 0)
+        gt_img = torch.sum(gt_img, dim = 0).Long()
       #  print('gt_img3 ', gt_img.shape)
 
        # if self.transform is not None:
