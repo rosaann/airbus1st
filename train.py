@@ -70,7 +70,9 @@ def postprocess_segmentation(pool, ids, binary_masks):
        
   # print('ids_and_instance_masks ', len(list(ids_and_instance_masks)))
        enc_list = []
-   for args in sum(enc_list, []):
+   s = sum(enc_list, [])
+   print('s ', s)
+   for args in s:
        enc_list.append(encode_rle(args))
        
    return enc_list
