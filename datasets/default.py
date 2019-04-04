@@ -59,9 +59,10 @@ class DefaultSegmenterDataset(Dataset):
                         mask[s + n_i] = 1
             mask.resize((h, w))
             image2 = pil_image.fromarray(mask)
+            image2 = image2.convert("L")
             if _ == 1:   
-                path_this = v.split('.')[0] + '.bmp'
-                image2.save(path_this )
+              #  path_this = v.split('.')[0] + '.bmp'
+                image2.save(v )
             self.datalist.append({'p':img_path, 'e':encoder_r, 'i':v})
            # if len(self.datalist) >= 1000:
            #     break
