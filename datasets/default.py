@@ -61,7 +61,7 @@ class DefaultSegmenterDataset(Dataset):
                         mask[s + n_i] = 1
             mask.resize((h, w))
             image2 = pil_image.fromarray(mask)
-            image2 = image2.convert("L")
+            image2 = image2.convert("1")
             if v == '4c9da9e4c.jpg':   
               #  path_this = v.split('.')[0] + '.bmp'
                 image2.save(v )
