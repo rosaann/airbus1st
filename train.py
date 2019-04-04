@@ -48,6 +48,8 @@ def extract_instance_masks_from_binary_mask(args):
 
 def encode_rle(args):
     _id, mask = args
+    print('_id ', _id)
+    print('mask ', mask)
     if mask is None: return (_id, None)
     print('mask shape ', mask.shape, ' mask ', mask)
     pixels = mask.T.flatten()
