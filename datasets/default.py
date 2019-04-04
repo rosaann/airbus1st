@@ -69,6 +69,7 @@ class DefaultSegmenterDataset(Dataset):
         mask = np.zeros(w * h)
         encoder = example['e']
         print('id ', example['p'])
+        print('e ', encoder)
         for i, start in enumerate( encoder):
             if i % 2 == 0:
                 print('start aaa ', start)
