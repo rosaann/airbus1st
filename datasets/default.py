@@ -67,7 +67,7 @@ class DefaultSegmenterDataset(Dataset):
                         if index < total:
                             mask[s + n_i] = 1
             mask.resize((h, w))
-            image2 = pil_image.fromarray(mask)
+            image2 = pil_image.fromarray(mask * 255)
             image2 = image2.convert("1")
             if v == '5ecd6788b.jpg':   
                 path_this = v.split('.')[0] + '.bmp'
