@@ -72,7 +72,10 @@ class DefaultSegmenterDataset(Dataset):
             if i % 2 == 0:
                 num = encoder[i + 1]
                 for n_i in range(int(num)):
-                    mask[int(start) + n_i] = 1
+                    s= int(start)
+                    print('start ', s)
+                    print('n_i ', n_i)
+                    mask[s + n_i] = 1
         
         mask.resize((h, w))
         image2 = pil_image.fromarray(mask)
