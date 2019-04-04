@@ -40,12 +40,16 @@ class DefaultSegmenterDataset(Dataset):
             img_path = os.path.join(self.images_dir, v )
             
             encoder_r = row['EncodedPixels']
-            w = 768
-            h = 768
+            image = cv2.imread(img_path )
+            shape = image.shape
+            h = shape[0]
+            w = shape[1]
             mask = np.zeros(w * h)
             encoder = encoder_r
             if v == '5ecd6788b.jpg':  
                 print('id ', v)
+                print('w ', w)
+                print('h ', h)
                 print('e ', encoder)
             en_list = encoder.split(' ')
             for i, start in enumerate( en_list):
