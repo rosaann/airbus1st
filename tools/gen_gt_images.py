@@ -26,7 +26,7 @@ def parse_args():
     return parser.parse_args()
 
 
-def main():
+def gen (csv ):
     args = parse_args()
     data_dir = args.data_dir
     raw_images_dir = os.path.join(data_dir, 'data')
@@ -35,7 +35,7 @@ def main():
 
 
 
-    df_train = pd.read_csv(os.path.join(raw_images_dir, 'train_ship_segmentations_v2.csv'))
+    df_train = pd.read_csv(os.path.join(raw_images_dir, csv))
     
     images_dir = './data/ship_train_v2/'
     for i, row in tqdm.tqdm(df_train.iterrows()):
@@ -80,4 +80,6 @@ def main():
     
     
 if __name__ == '__main__':
-  main()
+   csv_list = ['data_train_segmenter.csv', 'data_eval_segmenter.csv', 'data_test_segmenter.csv']
+   for csv in csv_list:
+       gen(csv)
