@@ -40,8 +40,27 @@ class DefaultSegmenterDataset(Dataset):
             img_path = os.path.join(self.images_dir, v )
             
             encoder_r = row['EncodedPixels']
-            
-            
+            w = 768
+            h = 768
+            mask = np.zeros(w * h)
+            encoder = encoder_r
+            print('id ', v)
+            print('e ', encoder)
+            en_list = encoder.split(' ')
+            for i, start in enumerate( en_list):
+                if i % 2 == 0:
+                    print('start aaa ', start)
+                    num = en_list[i + 1]
+                    print('num ', num)
+                    for n_i in range(int(num)):
+                        s= int(start)
+                        print('start ', s)
+                        print('n_i ', n_i)
+                        mask[s + n_i] = 1
+            mask.resize((h, w))
+            image2 = pil_image.fromarray(mask)
+            if _ == 1:               
+                image2.save(v + 'jpg')
             self.datalist.append({'p':img_path, 'e':encoder_r, 'i':v})
            # if len(self.datalist) >= 1000:
            #     break
@@ -66,25 +85,9 @@ class DefaultSegmenterDataset(Dataset):
         shape = image.shape
         h = shape[0]
         w = shape[1]
-        mask = np.zeros(w * h)
-        encoder = example['e']
-        print('id ', example['p'])
-        print('e ', encoder)
-        en_list = encoder.split(' ')
-        for i, start in enumerate( en_list):
-            if i % 2 == 0:
-                print('start aaa ', start)
-                num = en_list[i + 1]
-                print('num ', num)
-                for n_i in range(int(num)):
-                    s= int(start)
-                    print('start ', s)
-                    print('n_i ', n_i)
-                    mask[s + n_i] = 1
         
-        mask.resize((h, w))
-        image2 = pil_image.fromarray(mask)
-        image2.save(example['v'] + 'jpg')
+        
+        
        # if self.transform is not None:
            # print('image_name :', example['i'])
            # image = self.transform(image)
