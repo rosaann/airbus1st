@@ -29,6 +29,7 @@ from utils.metrics import *
 from models.model_factory import get_model
 from multiprocessing.pool import ThreadPool
 from scipy import ndimage
+import torch.nn as nn
 
 def extract_instance_masks_from_binary_mask(args):
     _id, binary_mask = args
@@ -105,6 +106,7 @@ def train_segmenter_single_epoch(config, model, dataloader, criterion, optimizer
            # labels = labels.cuda()
         
         binary_masks = model(images)
+
         loss = criterion(binary_masks, gt)
 
             # measure accuracy and record loss
@@ -397,13 +399,32 @@ def run(config):
   #  train_classifier(config, model_classifier, train_classifier_dataloaders,eval_classifier_dataloaders, criterion_classifier, optimizer_classifier, scheduler,
   #        writer, last_epoch+1)
     
-    criterion_segmenter = get_loss(config.loss_classifier)
+    criterion_segmenter = nn.NLLLoss()
+    
     train_segmenter_dataloaders = get_dataloader(config.data_segmenter, './data/data_train_segmenter.csv',config.train_segmenter.batch_size, 'train',config.transform_segmenter.num_preprocessor, get_transform(config.transform_segmenter, 'train'))
     eval_segmenter_dataloaders = get_dataloader(config.data_segmenter, './data/data_eval_segmenter.csv',config.eval_segmenter.batch_size, 'val', config.transform_segmenter.num_preprocessor, get_transform(config.transform_segmenter, 'val'))
   
     train_segmenter(config, model_segmenter, train_segmenter_dataloaders,eval_segmenter_dataloaders, criterion_segmenter, optimizer_segmenter, scheduler,
           writer, last_epoch+1)
+def getSegmenterCriterion():
+    hist_path = os.path.join(args.save, 'hist')
+    if os.path.isfile(hist_path + '.npy'):
+        hist = np.load(hist_path + '.npy')
+        print('{}Loaded cached dataset stats{}!!!'.format(CP_Y, CP_C))
+    else:
+        # Get class weights based on training data
+        hist = np.zeros((n_classes), dtype=np.float)
+        for batch_idx, (x, yt) in enumerate(data_loader_train):
+            h, bins = np.histogram(yt.numpy(), list(range(n_classes + 1)))
+            hist += h
 
+        hist = hist/(max(hist))     # Normalize histogram
+        print('{}Saving dataset stats{}...'.format(CP_Y, CP_C))
+        np.save(hist_path, hist)
+        
+    criterion_weight = 1/np.log(1.02 + hist)
+    criterion_weight[0] = 0
+    criterion_segmenter = nn.NLLLoss(Variable(torch.from_numpy(criterion_weight).float().cuda()))
 def parse_args():
     parser = argparse.ArgumentParser(description='airbus')
     parser.add_argument('--config', dest='config_file',

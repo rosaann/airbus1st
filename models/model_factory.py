@@ -62,7 +62,9 @@ class Resnet18Segmenter(torch.nn.Module):
         x = self.decoder2(x) + x2
         x = self.decoder3(x) + x1
         x = self.decoder4(x)
-        return  self.classifier(x)
+        x = self.classifier(x)
+        x = torch.sum(x, dim = 1)
+        return  x
     
 class Resnet18Classifier(torch.nn.Module):
     def __init__(self, num_classes):
