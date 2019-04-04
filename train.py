@@ -63,9 +63,18 @@ def encode_rle(args):
     return (_id, ' '.join(str(x) for x in runs))
 
 def postprocess_segmentation(pool, ids, binary_masks):
-    ids_and_instance_masks = map(extract_instance_masks_from_binary_mask, zip(ids, binary_masks))
-    print('ids_and_instance_masks ', len(list(ids_and_instance_masks)))
-    return encode_rle(sum(ids_and_instance_masks, []))
+   # ids_and_instance_masks = map(extract_instance_masks_from_binary_mask, zip(ids, binary_masks))
+   ex_list = []
+   for args in  zip(ids, binary_masks):
+       ex_list.append(extract_instance_masks_from_binary_mask(args))
+       
+  # print('ids_and_instance_masks ', len(list(ids_and_instance_masks)))
+       enc_list = []
+   for args in sum(enc_list, []):
+       enc_list.append(encode_rle(args))
+       
+   return enc_list
+  # return encode_rle(sum(ids_and_instance_masks, []))
 
    # return map(encode_rle, sum(ids_and_instance_masks, []))
 
