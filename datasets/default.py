@@ -12,7 +12,7 @@ import cv2
 
 from torch.utils.data.dataset import Dataset
 from torchvision import transforms
-
+import torch
 
 class DefaultSegmenterDataset(Dataset):
     def __init__(self,
@@ -66,7 +66,7 @@ class DefaultSegmenterDataset(Dataset):
         print('gt_path ', gt_path)
         gt_img = cv2.imread(gt_path)
         print('gt_img ', gt_img.shape)
-
+        
         transform_gt = transforms.Compose([
                 transforms.ToPILImage(),
                 transforms.ToTensor(), # range [0, 255] -> [0.0,1.0]
@@ -74,6 +74,8 @@ class DefaultSegmenterDataset(Dataset):
     
         gt_img = transform_gt(gt_img)
         print('gt_img2 ', gt_img.shape)
+        gt_img = torch.sum(gt_img, dim = 2)
+        print('gt_img3 ', gt_img.shape)
 
        # if self.transform is not None:
            # print('image_name :', example['i'])
