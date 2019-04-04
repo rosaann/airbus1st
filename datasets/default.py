@@ -44,7 +44,7 @@ class DefaultSegmenterDataset(Dataset):
             h = 768
             mask = np.zeros(w * h)
             encoder = encoder_r
-            if v == '4c9da9e4c.jpg':  
+            if v == '5ecd6788b.jpg':  
                 print('id ', v)
                 print('e ', encoder)
             en_list = encoder.split(' ')
@@ -55,14 +55,14 @@ class DefaultSegmenterDataset(Dataset):
                  #   print('num ', num)
                     for n_i in range(int(num)):
                         s= int(start)
-                        if v == '4c9da9e4c.jpg':  
+                        if v == '5ecd6788b.jpg':  
                            print('start ', s)
                            print('n_i ', n_i)
                         mask[s + n_i] = 1
             mask.resize((h, w))
             image2 = pil_image.fromarray(mask)
             image2 = image2.convert("1")
-            if v == '4c9da9e4c.jpg':   
+            if v == '5ecd6788b.jpg':   
               #  path_this = v.split('.')[0] + '.bmp'
                 image2.save(v )
             self.datalist.append({'p':img_path, 'e':encoder_r, 'i':v})
