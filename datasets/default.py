@@ -69,11 +69,12 @@ class DefaultSegmenterDataset(Dataset):
         mask = np.zeros(w * h)
         encoder = example['e']
         print('id ', example['p'])
+        print('e ', encoder)
         en_list = encoder.split(' ')
         for i, start in enumerate( en_list):
             if i % 2 == 0:
                 print('start aaa ', start)
-                num = encoder[i + 1]
+                num = en_list[i + 1]
                 for n_i in range(int(num)):
                     s= int(start)
                     print('start ', s)
