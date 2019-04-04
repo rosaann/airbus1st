@@ -44,18 +44,20 @@ class DefaultSegmenterDataset(Dataset):
             h = 768
             mask = np.zeros(w * h)
             encoder = encoder_r
-            print('id ', v)
-            print('e ', encoder)
+            if _ == 1:  
+                print('id ', v)
+                print('e ', encoder)
             en_list = encoder.split(' ')
             for i, start in enumerate( en_list):
                 if i % 2 == 0:
-                    print('start aaa ', start)
+                   # print('start aaa ', start)
                     num = en_list[i + 1]
-                    print('num ', num)
+                 #   print('num ', num)
                     for n_i in range(int(num)):
                         s= int(start)
-                        print('start ', s)
-                        print('n_i ', n_i)
+                        if _ == 1:  
+                           print('start ', s)
+                           print('n_i ', n_i)
                         mask[s + n_i] = 1
             mask.resize((h, w))
             image2 = pil_image.fromarray(mask)
