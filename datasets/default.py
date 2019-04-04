@@ -68,7 +68,7 @@ class DefaultSegmenterDataset(Dataset):
         w = shape[1]
         mask = np.zeros(w * h)
         encoder = example['e']
-        for i, start in encoder:
+        for i, start in enumerate( encoder):
             if i % 2 == 0:
                 num = encoder[i + 1]
                 for n_i in range(num):
