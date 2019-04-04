@@ -46,11 +46,11 @@ class DefaultSegmenterDataset(Dataset):
             w = shape[1]
             mask = np.zeros(w * h)
             encoder = encoder_r
-            if v == '5ecd6788b.jpg':  
-                print('id ', v)
-                print('w ', w)
-                print('h ', h)
-                print('e ', encoder)
+           # if v == '5ecd6788b.jpg':  
+            print('id ', v)
+            print('w ', w)
+            print('h ', h)
+            print('e ', encoder)
             en_list = encoder.split(' ')
             for i, start in enumerate( en_list):
                 if i % 2 == 0:
