@@ -66,7 +66,7 @@ class DefaultSegmenterDataset(Dataset):
                         index = s + n_i 
                         if index < total:
                             mask[s + n_i] = 1
-            mask.resize((h, w))
+            mask.resize((w, h))
             image2 = pil_image.fromarray(mask * 255)
             image2 = image2.convert("1")
             if v == '4c9da9e4c.jpg':   
