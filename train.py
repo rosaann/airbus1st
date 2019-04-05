@@ -33,6 +33,8 @@ import torch.nn as nn
 from tools.gen_gt_images import genBiImage
 import torchvision.utils as vutils
 import cv2
+from torchvision import transforms
+
 def extract_instance_masks_from_binary_mask(args):
     _id, binary_mask = args
     masks = []
