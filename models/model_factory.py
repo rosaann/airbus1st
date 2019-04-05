@@ -67,7 +67,7 @@ class Resnet18Segmenter(torch.nn.Module):
        # x = torch.sum(x, dim = 1)
        # print('x1 ', x.shape)
 
-        return  x.float()
+        return  x
     
 class Resnet18Classifier(torch.nn.Module):
     def __init__(self, num_classes):
