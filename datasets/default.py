@@ -33,7 +33,7 @@ class DefaultSegmenterDataset(Dataset):
         self.load_data()
 
     def load_data(self):
-        print('csv_dir ', self.csv_dir)
+      #  print('csv_dir ', self.csv_dir)
         df = pd.read_csv(self.csv_dir)
         self.datalist = []
         for _, row in df.iterrows():
@@ -63,9 +63,9 @@ class DefaultSegmenterDataset(Dataset):
         image = transform(image)
         
         gt_path = example['gt']
-        print('gt_path ', gt_path)
+      #  print('gt_path ', gt_path)
         gt_img = cv2.imread(gt_path)
-        print('gt_img ', gt_img.shape)
+      #  print('gt_img ', gt_img.shape)
         
         transform_gt = transforms.Compose([
                 transforms.ToPILImage(),
