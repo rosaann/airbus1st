@@ -30,7 +30,7 @@ def _get_default_config():
   c.model_segmenter.params = edict()
   
   c.train = edict()
-  c.train.dir = './result/out/writer/'
+  c.train.dir = './result/out/writer'
   
   c.train_classifier = edict()
   c.train_classifier.dir = './result/out/classifier/'

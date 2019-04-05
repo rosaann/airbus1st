@@ -32,7 +32,10 @@ def genBiImage(img_path, encoder_r):
             w = shape[1]
             mask = np.zeros(w * h)
             encoder = encoder_r
-            en_list = encoder.split(' ')
+            en_list = encoder
+            if isinstance(encoder,str):
+
+                en_list = encoder.split(' ')
             total = w * h
             for i, start in enumerate( en_list):
                 if i % 2 == 0:
