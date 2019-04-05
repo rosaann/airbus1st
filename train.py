@@ -113,8 +113,9 @@ def evaluate_segmenter_single_epoch(config, model, dataloader, criterion,
             loss = criterion(binary_masks, gt)
 
             # measure accuracy and record loss
+            loss_list.append(loss.item())
             if i == -1:
-                loss_list.append(loss.item())
+                
                 remaining_ids = list(map(lambda path: path.split('/')[-1], paths))
                 #    print('remaining_ids ', remaining_ids)
                 results = postprocess_segmentation(pool, remaining_ids[:len(binary_masks)], binary_masks)
