@@ -30,7 +30,9 @@ from models.model_factory import get_model
 from multiprocessing.pool import ThreadPool
 from scipy import ndimage
 import torch.nn as nn
-
+from gen_gt_images import genBiImage
+import torchvision.utils as vutils
+import cv2
 def extract_instance_masks_from_binary_mask(args):
     _id, binary_mask = args
     masks = []
@@ -83,6 +85,68 @@ def postprocess_segmentation(pool, ids, binary_masks):
    # return map(encode_rle, sum(ids_and_instance_masks, []))
 
 pool = ThreadPool(2)
+def evaluate_segmenter_single_epoch(config, model, dataloader, criterion,
+                          epoch, writer, postfix_dict):
+    model.eval()
+
+    with torch.no_grad():
+        batch_size = config.eval_segmenter.batch_size
+        total_size = len(dataloader.dataset)
+        total_step = math.ceil(total_size / batch_size)
+
+       # probability_list = []
+       # label_list = []
+        loss_list = []
+        tbar = tqdm.tqdm(enumerate(dataloader), total=total_step)
+
+        for i, data in tbar:
+            images = data['image']
+            gt = data['gt']
+            paths = data['path']
+            if torch.cuda.is_available():
+                images = images.cuda()
+                gt = gt.cuda()
+            binary_masks = model(images)
+            
+            loss = criterion(binary_masks, gt)
+
+            # measure accuracy and record loss
+            if i == 0:
+                loss_list.append(loss.item())
+                remaining_ids = list(map(lambda path: path.split('/')[-1], paths))
+                #    print('remaining_ids ', remaining_ids)
+                results = postprocess_segmentation(pool, remaining_ids[:len(binary_masks)], binary_masks)
+                for ir,  encoded_pixels in enumerate( results):
+                    image_src =cv2.imread(paths[ir])
+                    x1 = vutils.make_grid(image_src, normalize=True, scale_each=True)
+                    s1 = x1.size()
+    
+                    if len( list(s1)) >= 2:
+                        writer.add_image('result/{}'.format(ir * 2 ), x1, epoch)
+                        
+                    image_bi =genBiImage(paths[ir], encoded_pixels)
+                    x = vutils.make_grid(image_bi, normalize=True, scale_each=True)
+                    s = x.size()
+       # print(s)
+                    if len( list(s)) >= 2:
+                        writer.add_image('result/{}'.format(ir * 2 ), x, epoch)
+
+            f_epoch = epoch + i / total_step
+            desc = '{:5s}'.format('val')
+            desc += ', {:06d}/{:06d}, {:.2f} epoch'.format(i, total_step, f_epoch)
+            tbar.set_description(desc)
+            tbar.set_postfix(**postfix_dict)
+
+        log_dict = {}
+       
+        log_dict['loss'] = sum(loss_list) / len(loss_list)
+
+        for key, value in log_dict.items():
+            if writer is not None:
+                writer.add_scalar('val/{}'.format(key), value, epoch)
+            postfix_dict['val/{}'.format(key)] = value
+
+        return log_dict['f1']
 def train_segmenter_single_epoch(config, model, dataloader, criterion, optimizer,
                        epoch, writer, postfix_dict):
     model.train()
@@ -98,9 +162,8 @@ def train_segmenter_single_epoch(config, model, dataloader, criterion, optimizer
     for i, data in tbar:
         images = data['image']
         gt = data['gt']
-        paths = data['name']
-    #    print('images ', images.shape)
-   #     print('labels ', labels)
+       # paths = data['path']
+        
         if torch.cuda.is_available():
             images = images.cuda()
             gt = gt.cuda()
@@ -127,7 +190,7 @@ def train_segmenter_single_epoch(config, model, dataloader, criterion, optimizer
             optimizer.zero_grad()
         elif (i+1) % config.train_classifier.num_grad_acc == 0:
             optimizer.step()
-            optimizer.zero_grad()
+            optimizer.zero_grad()  
 
         f_epoch = epoch + i / total_step
 
@@ -170,7 +233,7 @@ def train_segmenter(config, model, train_dataloader, eval_dataloader, criterion,
                            criterion, optimizer, epoch, writer, postfix_dict)
 
         # val phase
-        f1 = evaluate_classifier_single_epoch(config, model, val_dataloader,
+        evaluate_segmenter_single_epoch(config, model, eval_dataloader,
                                    criterion, epoch, writer, postfix_dict)
 
       #  if scheduler.name == 'reduce_lr_on_plateau':
@@ -178,16 +241,9 @@ def train_segmenter(config, model, train_dataloader, eval_dataloader, criterion,
       #  elif scheduler.name != 'reduce_lr_on_plateau':
       #    scheduler.step()
 
-        utils.checkpoint.save_checkpoint(config.train_classifier.dir, model, optimizer, epoch, 0)
+        utils.checkpoint.save_checkpoint(config.train_segmenter.dir, model, optimizer, epoch, 0)
 
-        f1_list.append(f1)
-        f1_list = f1_list[-10:]
-        f1_mavg = sum(f1_list) / len(f1_list)
-
-        if f1 > best_f1:
-            best_f1 = f1
-        if f1_mavg > best_f1_mavg:
-            best_f1_mavg = f1_mavg
+        
     return {'f1': best_f1, 'f1_mavg': best_f1_mavg}
 def inference(model, images):
     logits = model(images)

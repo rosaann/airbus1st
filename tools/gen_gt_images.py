@@ -25,35 +25,13 @@ def parse_args():
                         default='', type=str)
     return parser.parse_args()
 
-
-def gen (csv ):
-    args = parse_args()
-    data_dir = args.data_dir
-    raw_images_dir = os.path.join(data_dir, 'data')
-    os.makedirs(os.path.join(raw_images_dir, 'ship_train_v2_gt'), exist_ok=True)
-    gt_images_dir = os.path.join(raw_images_dir, 'ship_train_v2_gt')
-
-
-
-    df_train = pd.read_csv(os.path.join(raw_images_dir, csv))
-    
-    images_dir = './data/ship_train_v2/'
-    for i, row in tqdm.tqdm(df_train.iterrows()):
-            v = row['ImageId']
-            img_path = os.path.join(images_dir, v )
-            
-            encoder_r = row['EncodedPixels']
+def genBiImage(img_path, encoder_r):
             image = cv2.imread(img_path )
             shape = image.shape
             h = shape[0]
             w = shape[1]
             mask = np.zeros(w * h)
             encoder = encoder_r
-          #  if v == '4c9da9e4c.jpg':  
-          #      print('id ', v)
-          #  print('w ', w)
-          #  print('h ', h)
-          #      print('e ', encoder)
             en_list = encoder.split(' ')
             total = w * h
             for i, start in enumerate( en_list):
@@ -73,6 +51,25 @@ def gen (csv ):
             mask = np.transpose(mask, (1, 0))
             image2 = pil_image.fromarray(mask * 255)
             image2 = image2.convert("1")
+            return image2
+def gen (csv ):
+    args = parse_args()
+    data_dir = args.data_dir
+    raw_images_dir = os.path.join(data_dir, 'data')
+    os.makedirs(os.path.join(raw_images_dir, 'ship_train_v2_gt'), exist_ok=True)
+    gt_images_dir = os.path.join(raw_images_dir, 'ship_train_v2_gt')
+
+
+
+    df_train = pd.read_csv(os.path.join(raw_images_dir, csv))
+    
+    images_dir = './data/ship_train_v2/'
+    for i, row in tqdm.tqdm(df_train.iterrows()):
+            v = row['ImageId']
+            img_path = os.path.join(images_dir, v )
+            
+            encoder_r = row['EncodedPixels']
+            image2 = genBiImage(img_path, encoder_r)
            # if v == '4c9da9e4c.jpg':   
             path_this = v.split('.')[0] + '.png'
             image2.save( os.path.join(gt_images_dir, path_this) )

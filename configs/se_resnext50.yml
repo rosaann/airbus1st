@@ -7,15 +7,15 @@ train_classifier:
   
 train_segmenter:
   dir: './result/out/segmenter/resnet18_segmenter'
-  batch_size: 18
-  num_epochs: 23
+  batch_size: 16
+  num_epochs: 200
   num_grad_acc: 4
 
 eval_classifier:
   batch_size: 20
 
 eval_segmenter:
-  batch_size: 20
+  batch_size: 8
   
 loss_classifier:
   name: 'cross_entropy'
