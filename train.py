@@ -158,7 +158,7 @@ def evaluate_segmenter_single_epoch(config, model, dataloader, criterion,
                 writer.add_scalar('val/{}'.format(key), value, epoch)
             postfix_dict['val/{}'.format(key)] = value
 
-        return log_dict['f1']
+        return 
 def train_segmenter_single_epoch(config, model, dataloader, criterion, optimizer,
                        epoch, writer, postfix_dict):
     model.train()
@@ -206,7 +206,6 @@ def train_segmenter_single_epoch(config, model, dataloader, criterion, optimizer
 
         f_epoch = epoch + i / total_step
 
-        log_dict['lr'] = optimizer.param_groups[0]['lr']
         for key, value in log_dict.items():
             postfix_dict['train/{}'.format(key)] = value
 
@@ -215,7 +214,8 @@ def train_segmenter_single_epoch(config, model, dataloader, criterion, optimizer
         tbar.set_description(desc)
         tbar.set_postfix(**postfix_dict)
 
-        
+    log_dict['lr'] = optimizer.param_groups[0]['lr']
+    
     log_dict['loss'] = total_loss
     if writer is not None:
         for key, value in log_dict.items():
