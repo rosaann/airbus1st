@@ -43,6 +43,7 @@ def genBiImage(img_path, encoder_r):
                     num = en_list[i + 1]
                  #   print('num ', num)
                     for n_i in range(int(num)):
+                        print('start ', start)
                         s= int(start)
                    #     if v == '4c9da9e4c.jpg':  
                    #        print('start ', s)
