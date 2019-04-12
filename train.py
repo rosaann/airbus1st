@@ -121,7 +121,7 @@ def evaluate_segmenter_single_epoch(config, model, dataloader, criterion,
                 results = postprocess_segmentation(pool, remaining_ids[:len(binary_masks)], binary_masks)
                 for ir,  encoded_pixels in enumerate( results):
                     transform = transforms.Compose([
-                            transforms.ToPILImage(),
+                            #transforms.ToPILImage(),
                             transforms.ToTensor(), # range [0, 255] -> [0.0,1.0]
                             ])
     
@@ -134,8 +134,8 @@ def evaluate_segmenter_single_epoch(config, model, dataloader, criterion,
                     if len( list(s1)) >= 2:
                         writer.add_image('result/{}'.format(ir * 2 ), x1, epoch)
                         
-                    image_bi =genBiImage(paths[ir], encoded_pixels)
-                  #  image_bi = transform(image_bi)
+                    image_bi =genBiImage(paths[ir], encoded_pixels[1])
+                    image_bi = transform(image_bi)
 
                     x = vutils.make_grid(image_bi, normalize=True, scale_each=True)
                     s = x.size()

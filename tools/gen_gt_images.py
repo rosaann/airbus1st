@@ -31,7 +31,7 @@ def genBiImage(img_path, encoder_r):
             h = shape[0]
             w = shape[1]
             mask = np.zeros(w * h)
-            encoder = encoder_r[1]
+            encoder = encoder_r
             en_list = encoder
             if isinstance(encoder,str):
 
