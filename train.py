@@ -114,7 +114,7 @@ def evaluate_segmenter_single_epoch(config, model, dataloader, criterion,
 
             # measure accuracy and record loss
             loss_list.append(loss.item())
-            if i == -1:
+            if i == 0:
                 
                 remaining_ids = list(map(lambda path: path.split('/')[-1], paths))
                 #    print('remaining_ids ', remaining_ids)
@@ -241,8 +241,8 @@ def train_segmenter(config, model, train_dataloader, eval_dataloader, criterion,
     best_f1_mavg = 0.0
     for epoch in range(start_epoch, num_epochs):
         # train phase
-        train_segmenter_single_epoch(config, model, train_dataloader,
-                           criterion, optimizer, epoch, writer, postfix_dict)
+    #    train_segmenter_single_epoch(config, model, train_dataloader,
+    #                       criterion, optimizer, epoch, writer, postfix_dict)
 
         # val phase
         evaluate_segmenter_single_epoch(config, model, eval_dataloader,
@@ -253,7 +253,7 @@ def train_segmenter(config, model, train_dataloader, eval_dataloader, criterion,
       #  elif scheduler.name != 'reduce_lr_on_plateau':
       #    scheduler.step()
 
-        utils.checkpoint.save_checkpoint(config.train_segmenter.dir, model, optimizer, epoch, 0)
+    #    utils.checkpoint.save_checkpoint(config.train_segmenter.dir, model, optimizer, epoch, 0)
 
         
     return {'f1': best_f1, 'f1_mavg': best_f1_mavg}
