@@ -36,6 +36,7 @@ def genBiImage(img_path, encoder_r):
             if isinstance(encoder,str):
 
                 en_list = encoder.split(' ')
+            print('en_list ', en_list)
             total = w * h
             for i, start in enumerate( en_list):
                 if i % 2 == 0:
