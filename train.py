@@ -128,7 +128,7 @@ def evaluate_segmenter_single_epoch(config, model, dataloader, criterion,
                     image_src =cv2.imread(paths[ir])
                   #  image_src = transform(image_src)
 
-                    x1 = vutils.make_grid(image_src, normalize=True, scale_each=True)
+                    x1 = vutils.make_grid(torch.from_numpy(image_src), normalize=True, scale_each=True)
                     s1 = x1.size()
     
                     if len( list(s1)) >= 2:
