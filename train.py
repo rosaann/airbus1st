@@ -135,7 +135,7 @@ def evaluate_segmenter_single_epoch(config, model, dataloader, criterion,
                         writer.add_image('result/{}'.format(ir * 2 ), x1, epoch)
                         
                     image_bi =genBiImage(paths[ir], encoded_pixels)
-                    image_bi = transform(image_bi)
+                  #  image_bi = transform(image_bi)
 
                     x = vutils.make_grid(image_bi, normalize=True, scale_each=True)
                     s = x.size()
