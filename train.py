@@ -124,7 +124,7 @@ def evaluate_segmenter_single_epoch(config, model, dataloader, criterion,
                             #transforms.ToPILImage(),
                             transforms.ToTensor(), # range [0, 255] -> [0.0,1.0]
                             ])
-                    print('paths[ir] ', paths[ir])
+                 #   print('paths[ir] ', paths[ir])
                     image_src =cv2.imread(paths[ir])
                     image_src = transform(image_src)
 
@@ -132,6 +132,7 @@ def evaluate_segmenter_single_epoch(config, model, dataloader, criterion,
                     s1 = x1.size()
     
                     if len( list(s1)) >= 2:
+                        print('src image ', x1)
                         writer.add_image('result/{}'.format(ir * 2 ), x1, epoch)
                         
                     image_bi =genBiImage(paths[ir], encoded_pixels[1])
