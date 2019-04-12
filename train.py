@@ -126,7 +126,7 @@ def evaluate_segmenter_single_epoch(config, model, dataloader, criterion,
                             ])
                  #   print('paths[ir] ', paths[ir])
                     image_src =cv2.imread(paths[ir])
-                    image_src = transform(image_src)
+                  #  image_src = transform(image_src)
 
                     x1 = vutils.make_grid(image_src, normalize=True, scale_each=True)
                     s1 = x1.size()
