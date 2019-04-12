@@ -41,7 +41,7 @@ def genBiImage(img_path, encoder_r):
                 if i % 2 == 0:
                    # print('start aaa ', start)
                     num = en_list[i + 1]
-                 #   print('num ', num)
+                    print('num ', num)
                     for n_i in range(int(num)):
                         print('start ', start)
                         s= int(start)
