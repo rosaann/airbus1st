@@ -47,7 +47,7 @@ class Resnet18Segmenter(torch.nn.Module):
             torch.nn.ReLU(inplace=True),
             torch.nn.ConvTranspose2d(32, num_classes, (2, 2), stride=2)
         )
-        self.lsm = nn.LogSoftmax(dim=1)
+        self.lsm = torch.nn.LogSoftmax(dim=1)
 
     def forward(self, x):
         
