@@ -124,7 +124,7 @@ def evaluate_segmenter_single_epoch(config, model, dataloader, criterion,
                             #transforms.ToPILImage(),
                             transforms.ToTensor(), # range [0, 255] -> [0.0,1.0]
                             ])
-    
+                    print('paths[ir] ', paths[ir])
                     image_src =cv2.imread(paths[ir])
                     image_src = transform(image_src)
 
