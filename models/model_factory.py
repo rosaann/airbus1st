@@ -65,7 +65,7 @@ class Resnet18Segmenter(torch.nn.Module):
         x = self.decoder4(x)
         x = self.classifier(x)
         x = self.lsm(x)
-        print('x ', x)
+        print('x ', x.shape)
        # x = torch.sum(x, dim = 1)
        # print('x1 ', x.shape)
 
