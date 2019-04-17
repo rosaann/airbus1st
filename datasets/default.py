@@ -42,8 +42,8 @@ class DefaultSegmenterDataset(Dataset):
             gt_path = os.path.join(self.images_gt_dir, (v.split('.')[0] + '.png'))
             
             self.datalist.append({'p':img_path, 'gt':gt_path, 'i':v})
-            if len(self.datalist) >= 30:
-                break
+           # if len(self.datalist) >= 30:
+           #     break
    
 
     def __getitem__(self, index):

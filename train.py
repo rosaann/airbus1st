@@ -168,8 +168,8 @@ def evaluate_segmenter_single_epoch(config, model, dataloader, criterion,
 
         for key, value in log_dict.items():
             if writer is not None:
-                print('key ', key)
-                print('value ', value)
+             #   print('key ', key)
+            #    print('value ', value)
                 writer.add_scalar('val/{}'.format(key), value, epoch)
             postfix_dict['val/{}'.format(key)] = value
 
