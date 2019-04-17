@@ -54,7 +54,7 @@ def genBiImage(img_path, encoder_r):
                             mask[s + n_i] = 1
             mask.resize((w, h))
             mask = np.transpose(mask, (1, 0))
-            image2 = pil_image.fromarray(mask * 255)
+            image2 = pil_image.fromarray(mask )
             image2 = image2.convert("1")
             return image2
 def gen (csv ):
