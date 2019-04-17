@@ -155,7 +155,8 @@ def evaluate_segmenter_single_epoch(config, model, dataloader, criterion,
         log_dict = {}
        
         log_dict['loss'] = sum(loss_list) / len(loss_list)
-        log_dict['accuracy'] = accuracy
+        log_dict['accuracy0'] = accuracy[0]
+        log_dict['accuracy1'] = accuracy[1]
         log_dict['avg_accuracy'] = avg_accuracy
         log_dict['IoU'] = IoU
         log_dict['mIoU'] = mIoU
