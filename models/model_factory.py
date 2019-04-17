@@ -49,7 +49,7 @@ class Resnet18Segmenter(torch.nn.Module):
         )
         self.lsm = torch.nn.LogSoftmax(dim=1)
 
-    def forward(self, x):
+    def forward(self, x, phase='train'):
         
         x = self.resnet.conv1(x)
         x = self.resnet.bn1(x)
@@ -64,7 +64,8 @@ class Resnet18Segmenter(torch.nn.Module):
         x = self.decoder3(x) + x1
         x = self.decoder4(x)
         x = self.classifier(x)
-        x = self.lsm(x)
+        if phase == 'train':
+            x = self.lsm(x)
       #  print('x ', x)
        # x = torch.sum(x, dim = 1)
        # print('x1 ', x.shape)
