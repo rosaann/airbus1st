@@ -100,7 +100,7 @@ def evaluate_segmenter_single_epoch(config, model, dataloader, criterion,
        # label_list = []
         loss_list = []
         tbar = tqdm.tqdm(enumerate(dataloader), total=total_step)
-
+        out_images_dir = './data/val_result/'
         for i, data in tbar:
             images = data['image']
             gt = data['gt']
@@ -125,24 +125,19 @@ def evaluate_segmenter_single_epoch(config, model, dataloader, criterion,
                             transforms.ToTensor(), # range [0, 255] -> [0.0,1.0]
                             ])
                  #   print('paths[ir] ', paths[ir])
-                    image_src =cv2.imread(paths[ir])
+                 #   image_src =cv2.imread(paths[ir])
                   #  image_src = transform(image_src)
 
-                    x1 = vutils.make_grid(image_src, normalize=True, scale_each=True)
-                    s1 = x1.size()
+                #    x1 = vutils.make_grid(torch.from_numpy(image_src), normalize=True, scale_each=True)
+                 #   s1 = x1.size()
     
-                    if len( list(s1)) >= 2:
-                        print('src image ', x1)
-                        writer.add_image('result/{}'.format(ir * 2 ), x1, epoch)
+                 #   if len( list(s1)) >= 2:
+                #        print('src image ', x1)
+                      #  writer.add_image('result/{}'.format(ir  ), x1, epoch)
                         
                     image_bi =genBiImage(paths[ir], encoded_pixels[1])
-                    image_bi = transform(image_bi)
-
-                    x = vutils.make_grid(image_bi, normalize=True, scale_each=True)
-                    s = x.size()
-       # print(s)
-                    if len( list(s)) >= 2:
-                        writer.add_image('result/{}'.format(ir * 2 ), x, epoch)
+                    path_this = paths[ir].split('.')[0] + '.png'
+                    image_bi.save( os.path.join(out_images_dir, path_this) )
 
             f_epoch = epoch + i / total_step
             desc = '{:5s}'.format('val')
@@ -242,8 +237,8 @@ def train_segmenter(config, model, train_dataloader, eval_dataloader, criterion,
     best_f1_mavg = 0.0
     for epoch in range(start_epoch, num_epochs):
         # train phase
-    #    train_segmenter_single_epoch(config, model, train_dataloader,
-    #                       criterion, optimizer, epoch, writer, postfix_dict)
+        train_segmenter_single_epoch(config, model, train_dataloader,
+                           criterion, optimizer, epoch, writer, postfix_dict)
 
         # val phase
         evaluate_segmenter_single_epoch(config, model, eval_dataloader,
