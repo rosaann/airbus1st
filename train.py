@@ -34,6 +34,7 @@ from tools.gen_gt_images import genBiImage
 import torchvision.utils as vutils
 import cv2
 from torchvision import transforms
+from utils.confusion_matrix import ConfusionMatrix
 
 def extract_instance_masks_from_binary_mask(args):
     _id, binary_mask = args
@@ -88,7 +89,7 @@ def postprocess_segmentation(pool, ids, binary_masks):
 
 pool = ThreadPool(2)
 def evaluate_segmenter_single_epoch(config, model, dataloader, criterion,
-                          epoch, writer, postfix_dict):
+                          epoch, writer, postfix_dict, metrics):
     model.eval()
 
     with torch.no_grad():
@@ -111,10 +112,13 @@ def evaluate_segmenter_single_epoch(config, model, dataloader, criterion,
             binary_masks = model(images)
             
             loss = criterion(binary_masks, gt)
-
+            
+            pred = binary_masks.data.cpu().numpy()
+            gt = gt.cpu().numpy()
+            metrics.update_matrix(gt, pred)
             # measure accuracy and record loss
             loss_list.append(loss.item())
-            if i == 0:
+            if i == -1:
                 
                 remaining_ids = list(map(lambda path: path.split('/')[-1], paths))
                 #    print('remaining_ids ', remaining_ids)
@@ -135,7 +139,7 @@ def evaluate_segmenter_single_epoch(config, model, dataloader, criterion,
                 #        print('src image ', x1)
                       #  writer.add_image('result/{}'.format(ir  ), x1, epoch)
                         
-                    image_bi =genBiImage(paths[ir], encoded_pixels[1])
+                    image_bi =genBiImage(paths[ir], encoded_pixels[1], 200)
                     path_this = paths[ir].split('.')[0] + '.png'
                     image_bi.save( os.path.join(out_images_dir, path_this) )
 
@@ -145,16 +149,31 @@ def evaluate_segmenter_single_epoch(config, model, dataloader, criterion,
             tbar.set_description(desc)
             tbar.set_postfix(**postfix_dict)
 
+        accuracy, avg_accuracy, IoU, mIoU, conf_mat = metrics.scores()
+        metrics.reset()
+        
         log_dict = {}
        
         log_dict['loss'] = sum(loss_list) / len(loss_list)
+        log_dict['accuracy0'] = accuracy[0]
+        log_dict['accuracy1'] = accuracy[1]
+        log_dict['avg_accuracy'] = avg_accuracy
+        log_dict['IoU0'] = IoU[0]
+        log_dict['IoU1'] = IoU[1]
+        log_dict['mIoU'] = mIoU
+        log_dict['conf_mat00'] = conf_mat[0][0]
+        log_dict['conf_mat01'] = conf_mat[0][1]
+        log_dict['conf_mat10'] = conf_mat[1][0]
+        log_dict['conf_mat11'] = conf_mat[1][1]
 
         for key, value in log_dict.items():
             if writer is not None:
+             #   print('key ', key)
+            #    print('value ', value)
                 writer.add_scalar('val/{}'.format(key), value, epoch)
             postfix_dict['val/{}'.format(key)] = value
 
-        return 
+        return metrics
 def train_segmenter_single_epoch(config, model, dataloader, criterion, optimizer,
                        epoch, writer, postfix_dict):
     model.train()
@@ -220,6 +239,7 @@ def train_segmenter_single_epoch(config, model, dataloader, criterion, optimizer
 def train_segmenter(config, model, train_dataloader, eval_dataloader, criterion, optimizer, scheduler, writer, start_epoch):
     num_epochs = config.train_segmenter.num_epochs
     
+    metrics = ConfusionMatrix(2, ['bk','ship'])
     if torch.cuda.device_count() > 1:
         model = torch.nn.DataParallel(model)
     if torch.cuda.is_available():
@@ -241,8 +261,8 @@ def train_segmenter(config, model, train_dataloader, eval_dataloader, criterion,
                            criterion, optimizer, epoch, writer, postfix_dict)
 
         # val phase
-        evaluate_segmenter_single_epoch(config, model, eval_dataloader,
-                                   criterion, epoch, writer, postfix_dict)
+        metrics = evaluate_segmenter_single_epoch(config, model, eval_dataloader,
+                                   criterion, epoch, writer, postfix_dict, metrics)
 
       #  if scheduler.name == 'reduce_lr_on_plateau':
       #    scheduler.step(f1)
@@ -250,7 +270,7 @@ def train_segmenter(config, model, train_dataloader, eval_dataloader, criterion,
       #    scheduler.step()
 
     #    utils.checkpoint.save_checkpoint(config.train_segmenter.dir, model, optimizer, epoch, 0)
-
+        
         
     return {'f1': best_f1, 'f1_mavg': best_f1_mavg}
 def inference(model, images):

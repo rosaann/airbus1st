@@ -25,7 +25,7 @@ def parse_args():
                         default='', type=str)
     return parser.parse_args()
 
-def genBiImage(img_path, encoder_r):
+def genBiImage(img_path, encoder_r, zoom=1):
             image = cv2.imread(img_path )
             shape = image.shape
             h = shape[0]
@@ -36,7 +36,7 @@ def genBiImage(img_path, encoder_r):
             if isinstance(encoder,str):
 
                 en_list = encoder.split(' ')
-            print('en_list ', en_list)
+        #    print('en_list ', en_list)
             total = w * h
             for i, start in enumerate( en_list):
                 if i % 2 == 0:
@@ -54,7 +54,7 @@ def genBiImage(img_path, encoder_r):
                             mask[s + n_i] = 1
             mask.resize((w, h))
             mask = np.transpose(mask, (1, 0))
-            image2 = pil_image.fromarray(mask * 255)
+            image2 = pil_image.fromarray(mask * zoom)
             image2 = image2.convert("1")
             return image2
 def gen (csv ):
