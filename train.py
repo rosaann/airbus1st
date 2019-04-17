@@ -158,7 +158,8 @@ def evaluate_segmenter_single_epoch(config, model, dataloader, criterion,
         log_dict['accuracy0'] = accuracy[0]
         log_dict['accuracy1'] = accuracy[1]
         log_dict['avg_accuracy'] = avg_accuracy
-        log_dict['IoU'] = IoU
+        log_dict['IoU0'] = IoU[0]
+        log_dict['IoU1'] = IoU[1]
         log_dict['mIoU'] = mIoU
         log_dict['conf_mat'] = conf_mat
 
