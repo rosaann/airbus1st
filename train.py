@@ -161,8 +161,10 @@ def evaluate_segmenter_single_epoch(config, model, dataloader, criterion,
         log_dict['IoU0'] = IoU[0]
         log_dict['IoU1'] = IoU[1]
         log_dict['mIoU'] = mIoU
-        log_dict['conf_mat0'] = conf_mat[0]
-        log_dict['conf_mat1'] = conf_mat[1]
+        log_dict['conf_mat00'] = conf_mat[0][0]
+        log_dict['conf_mat01'] = conf_mat[0][1]
+        log_dict['conf_mat10'] = conf_mat[1][0]
+        log_dict['conf_mat11'] = conf_mat[1][1]
 
         for key, value in log_dict.items():
             if writer is not None:
