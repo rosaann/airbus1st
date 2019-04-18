@@ -49,7 +49,7 @@ class Resnet18Segmenter(torch.nn.Module):
         )
         self.lsm = torch.nn.LogSoftmax(dim=1)
 
-    def forward(self, x, phase='train'):
+    def forward(self, x):
         
         x = self.resnet.conv1(x)
         x = self.resnet.bn1(x)
@@ -64,11 +64,8 @@ class Resnet18Segmenter(torch.nn.Module):
         x = self.decoder3(x) + x1
         x = self.decoder4(x)
         x = self.classifier(x)
-
         x = self.lsm(x)
-      #  print('x ', x)
-
-      #  print('x ', x.shape)
+        print('x ', x.shape)
        # x = torch.sum(x, dim = 1)
        # print('x1 ', x.shape)
 
@@ -85,12 +82,12 @@ class Resnet18Classifier(torch.nn.Module):
         print('x.shape ', x.shape)
         return {'has_ships': self.resnet(x)}
 def get_resnet18_segmenter(num_classes=1, **kwargs):
-    return Resnet18Segmenter(1)
+    return Resnet18Segmenter(2)
 
 def get_resnet18_classifier(num_classes=1, **kwargs):
     return Resnet18Classifier(1)
 
-def get_senet(model_name='se_resnext50', num_classes=1, **_):
+def get_senet(model_name='se_resnext50', num_classes=2, **_):
     model = pretrainedmodels.__dict__[model_name](num_classes=1000, pretrained=None)
     
 
@@ -100,7 +97,7 @@ def get_senet(model_name='se_resnext50', num_classes=1, **_):
     return model
 
 
-def get_se_resnext50(num_classes=1, **kwargs):
+def get_se_resnext50(num_classes=2, **kwargs):
     return get_senet('se_resnext50_32x4d', num_classes=num_classes, **kwargs)
 def get_model(model_name, params = None):
     print('model name:', model_name)
