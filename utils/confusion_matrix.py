@@ -52,10 +52,10 @@ class ConfusionMatrix:
         else:
             print("Data with this dimension cannot be handled")
 
-      #  print('temp_target ', temp_target.shape, ' ', temp_target)
-      #  print('temp_prediction ', temp_prediction.shape, ' ', temp_prediction)
+        print('temp_target ', temp_target.shape, ' ', temp_target)
+        print('temp_prediction ', temp_prediction.shape, ' ', temp_prediction)
         self.mat += confusion_matrix(temp_target, temp_prediction, labels=self.list_classes)
-     #   print('self.mat ', self.mat.shape, ' ', self.mat)
+        print('self.mat ', self.mat.shape, ' ', self.mat)
 
     def scores(self):
         tp = 0
