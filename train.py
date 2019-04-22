@@ -196,8 +196,8 @@ def train_segmenter_single_epoch(config, model, dataloader, criterion, optimizer
             gt = gt.cuda()
         
         binary_masks = model(images)
-        print('binary_masks ', binary_masks )
-        print('gt ', gt)
+        print('binary_masks ', binary_masks.shape, ' ',  binary_masks)
+        print('gt ', gt.shape, ' ', gt )
         loss = criterion(binary_masks, gt)
 
             # measure accuracy and record loss
