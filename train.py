@@ -35,6 +35,7 @@ import torchvision.utils as vutils
 import cv2
 from torchvision import transforms
 from utils.confusion_matrix import ConfusionMatrix
+from models.linknet import LinkNet
 
 def extract_instance_masks_from_binary_mask(args):
     _id, binary_mask = args
@@ -196,8 +197,8 @@ def train_segmenter_single_epoch(config, model, dataloader, criterion, optimizer
             gt = gt.cuda()
         
         binary_masks = model(images)
-        print('binary_masks ', binary_masks.shape, ' ',  binary_masks)
-        print('gt ', gt.shape, ' ', gt )
+     #   print('binary_masks ', binary_masks.shape, ' ',  binary_masks)
+     #   print('gt ', gt.shape, ' ', gt )
         loss = criterion(binary_masks, gt)
 
             # measure accuracy and record loss
@@ -447,7 +448,8 @@ def run(config):
    # train_dir = config.train.dir
     
     model_classifier = get_model(config.model_classifier.name)
-    model_segmenter = get_model(config.model_segmenter.name)
+ #   model_segmenter = get_model(config.model_segmenter.name)
+    model_segmenter = LinkNet(2)
     if torch.cuda.is_available():
         model_classifier = model_classifier.cuda()
         model_segmenter = model_segmenter.cuda()
