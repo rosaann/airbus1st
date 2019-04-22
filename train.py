@@ -177,7 +177,7 @@ def evaluate_segmenter_single_epoch(config, model, dataloader, criterion,
 def train_segmenter_single_epoch(config, model, dataloader, criterion, optimizer,
                        epoch, writer, postfix_dict):
     model.train()
-    torch.set_printoptions(threshold=100000)
+    torch.set_printoptions(threshold=100000000000)
     batch_size = config.train_segmenter.batch_size
     total_size = len(dataloader.dataset)
     total_step = math.ceil(total_size / batch_size)
