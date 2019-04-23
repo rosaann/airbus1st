@@ -57,7 +57,7 @@ def genBiImage(img_path, encoder_r, zoom=1):
             mask.resize((w, h))
             mask = np.transpose(mask, (1, 0))
             image2 = pil_image.fromarray(mask * zoom)
-          #  image2 = image2.convert("1")
+            image2 = image2.convert("L")
             return image2
 def gen (csv ):
     args = parse_args()
