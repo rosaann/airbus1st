@@ -76,7 +76,7 @@ class DefaultSegmenterDataset(Dataset):
       #  print('gt_img2 ', gt_img.shape)
       #  gt_img = torch.sum(gt_img, dim = 0).type(torch.LongTensor)
         gt_img = gt_img.type(torch.LongTensor)
-        print('gt_img3 ', gt_img.shape)
+       # print('gt_img3 ', gt_img.shape)
 
        # if self.transform is not None:
            # print('image_name :', example['i'])
