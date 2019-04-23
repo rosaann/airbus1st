@@ -78,7 +78,7 @@ def gen (csv ):
            # if v == '4c9da9e4c.jpg':   
             path_this = v.split('.')[0] + '.png'
             image2.save( os.path.join(gt_images_dir, path_this) )
-        
+            break
     
     
 if __name__ == '__main__':
