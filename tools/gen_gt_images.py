@@ -52,12 +52,12 @@ def genBiImage(img_path, encoder_r, zoom=1):
                         index = s + n_i 
                         if index < total:
                             mask[s + n_i] = 1
-                            print('s ', s)
-                            print('n_i ', n_i)
+                          #  print('s ', s)
+                         #   print('n_i ', n_i)
             mask.resize((w, h))
             mask = np.transpose(mask, (1, 0))
             image2 = pil_image.fromarray(mask * zoom)
-            image2 = image2.convert("1")
+          #  image2 = image2.convert("1")
             return image2
 def gen (csv ):
     args = parse_args()
