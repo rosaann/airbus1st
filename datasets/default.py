@@ -65,11 +65,11 @@ class DefaultSegmenterDataset(Dataset):
         gt_path = example['gt']
       #  print('gt_path ', gt_path)
         gt_img = cv2.imread(gt_path, 0)
-        print('gt_img ', gt_img.shape)
+        print('gt_img ', gt_img)
         
         transform_gt = transforms.Compose([
              #   transforms.ToPILImage(),
-                transforms.ToTensor(), # range [0, 255] -> [0.0,1.0]
+                transforms.ToTensor(basic=True), # range [0, 255] -> [0.0,1.0]
                 ])
       #  gt_img = gt_img * 255
         gt_img = transform_gt(gt_img)
