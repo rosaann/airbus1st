@@ -72,7 +72,7 @@ class DefaultSegmenterDataset(Dataset):
                 transforms.ToTensor(), # range [0, 255] -> [0.0,1.0]
                 ])
       #  gt_img = gt_img * 255
-        gt_img = transform_gt(gt_img)[0]
+        gt_img = transform_gt(gt_img)
         print('gt_img2 ', gt_img)
       #  gt_img = torch.sum(gt_img, dim = 0).type(torch.LongTensor)
         gt_img = gt_img.type(torch.LongTensor)
