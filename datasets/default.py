@@ -68,7 +68,7 @@ class DefaultSegmenterDataset(Dataset):
       #  print('gt_img ', gt_img.shape)
         
         transform_gt = transforms.Compose([
-                transforms.ToPILImage(),
+             #   transforms.ToPILImage(),
                 transforms.ToTensor(), # range [0, 255] -> [0.0,1.0]
                 ])
       #  gt_img = gt_img * 255
