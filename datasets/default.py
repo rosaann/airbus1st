@@ -81,9 +81,9 @@ class DefaultSegmenterDataset(Dataset):
        # if self.transform is not None:
            # print('image_name :', example['i'])
            # image = self.transform(image)
-
+        gt_tensor = torch.tensor(gt_img, dtype=torch.long)
         return {'image': image,
-                'gt': gt_img,
+                'gt': gt_tensor,
                 'path':filename
                 }
 
