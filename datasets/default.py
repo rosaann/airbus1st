@@ -23,7 +23,7 @@ class DefaultSegmenterDataset(Dataset):
                  num_fold=5,
                  
                  **_):
-
+        torch.set_printoptions(threshold=1000000)
         self.idx_fold = idx_fold
         self.num_fold = num_fold
         self.transform = transform
