@@ -271,7 +271,7 @@ def train_segmenter(config, model, train_dataloader, eval_dataloader, criterion,
       #  elif scheduler.name != 'reduce_lr_on_plateau':
       #    scheduler.step()
 
-    #    utils.checkpoint.save_checkpoint(config.train_segmenter.dir, model, optimizer, epoch, 0)
+        utils.checkpoint.save_checkpoint(config.train_segmenter.dir, model, optimizer, epoch, 0)
         
         
     return {'f1': best_f1, 'f1_mavg': best_f1_mavg}
