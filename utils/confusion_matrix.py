@@ -15,7 +15,7 @@ class ConfusionMatrix:
         self.classes = classes
         self.list_classes = list(range(nclasses))
         self.useUnlabeled = useUnlabeled
-        self.matStartIdx = 1 if not self.useUnlabeled else 0
+        self.matStartIdx = 0
 
     def update_matrix(self, target, prediction):
         print('target ', target.shape)
@@ -54,6 +54,7 @@ class ConfusionMatrix:
 
         print('temp_target ', temp_target.shape, ' ', temp_target)
         print('temp_prediction ', temp_prediction.shape, ' ', temp_prediction)
+        
         self.mat += confusion_matrix(temp_target, temp_prediction, labels=self.list_classes)
         print('self.mat ', self.mat.shape, ' ', self.mat)
 
