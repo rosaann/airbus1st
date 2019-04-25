@@ -259,8 +259,8 @@ def train_segmenter(config, model, train_dataloader, eval_dataloader, criterion,
     best_f1_mavg = 0.0
     for epoch in range(start_epoch, num_epochs):
         # train phase
-        train_segmenter_single_epoch(config, model, train_dataloader,
-                           criterion, optimizer, epoch, writer, postfix_dict)
+     #   train_segmenter_single_epoch(config, model, train_dataloader,
+     #                      criterion, optimizer, epoch, writer, postfix_dict)
 
         # val phase
         metrics = evaluate_segmenter_single_epoch(config, model, eval_dataloader,
