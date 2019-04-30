@@ -10,7 +10,9 @@ train_segmenter:
   batch_size: 16
   num_epochs: 300
   num_grad_acc: 4
-
+train:
+  writer_dir:'./result/out/classifier/writer'
+ # writer_dir:'./result/out/segmenter/writer'
 eval_classifier:
   batch_size: 20
 
