@@ -476,7 +476,7 @@ def run(config):
     print('from segmenter checkpoint: {} last epoch:{}'.format(checkpoint_segmenter, last_epoch))
   #  scheduler = get_scheduler(config, optimizer, last_epoch)
   
-    writer = SummaryWriter(config.train.writer_dir)
+    writer = SummaryWriter('./result/out/segmenter/writer')
     
     scheduler = 'none'
   #  train_classifier_dataloaders = get_dataloader(config.data_classifier, './data/data_train.csv',config.train_classifier.batch_size, 'train',config.transform_classifier.num_preprocessor, get_transform(config.transform_classifier, 'train'))
